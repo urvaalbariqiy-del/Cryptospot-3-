@@ -1,22 +1,11 @@
 """
 Cryptospot 3% — ANKETA boti backend (@CRYPTO3FOIZBOT).
 
-Bu bot faqat sayt anketasi uchun (VIP 3% / to'lov / community mavjud MANEJER
-botda — bu bot ularga aralashmaydi). Vazifasi:
+Voronka: anketa (sayt) -> admin tasdiqlaydi (tugma yoki Reply) -> saytda tarif
+tanlash ochiladi -> to'lov manejer botda.
 
-  1. Sayt "Botda ro'yxatdan o'tish" tugmasi orqali foydalanuvchini
-     t.me/<bot>?start=<session_id> ga yo'naltiradi.
-  2. Foydalanuvchi /start bosadi -> session_id uning chat_id'siga bog'lanadi
-     (storage.register_session) va botga "saytga qayting" deb aytiladi.
-  3. Sayt /api/check-registration/<session_id> orqali buni tekshiradi va
-     anketa formasini ochadi.
-  4. Anketa /api/survey ga POST qilinadi -> admin(lar)ga yuboriladi va shu
-     xabar ID'si foydalanuvchi chat_id bilan bog'lanadi (relay) — admin
-     "Reply" qilib yozsa, bot uni avtomatik foydalanuvchiga yetkazadi.
-  5. Foydalanuvchi botga yozgan har qanday xabar ham admin(lar)ga forward
-     qilinadi va relay'ga yoziladi (ikki tomonlama "operator" suhbati).
-
-Webhook rejimida ishlaydi.
+Bu bot faqat anketa/tasdiqlash uchun (VIP 3% / to'lov / community mavjud
+MANEJER botda). Webhook rejimida ishlaydi.
 """
 import html
 import traceback
@@ -26,13 +15,18 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import config
 import storage
-from telegram_api import send_message, forward_message, copy_message
+from telegram_api import (
+    send_message,
+    forward_message,
+    copy_message,
+    answer_callback_query,
+)
 
 app = FastAPI(title="Cryptospot 3% anketa bot backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],   # xohlasangiz bu yerga faqat o'z domeningizni yozing
+    allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -50,23 +44,33 @@ def on_startup():
 REGISTERED_TEXT = (
     "✅ <b>Tayyor!</b>\n\n"
     "Ro'yxatdan o'tdingiz. Endi <b>saytga qayting</b> va anketani to'ldiring — "
-    "javoblaringiz shu bot orqali adminga yetkaziladi va admin siz bilan "
-    "bog'lanadi."
+    "admin ko'rib chiqib tasdiqlaydi, so'ng saytda tarif tanlash ochiladi."
+)
+
+APPROVED_USER_TEXT = (
+    "✅ <b>Tabriklaymiz!</b>\n\n"
+    "Anketangiz <b>tasdiqlandi</b>. Endi saytga qayting va o'zingizga mos "
+    "<b>tarifni tanlang</b> — to'lov va kirish manejer bot orqali amalga oshadi."
 )
 
 ADMIN_INFO_TEXT = (
     "🛠 <b>Anketa boti</b>\n\n"
-    "Sayt anketalari va foydalanuvchi xabarlari shu chatga keladi.\n"
-    "Foydalanuvchiga javob berish uchun kelgan xabarga <b>Reply</b> qiling — "
-    "bot uni avtomatik yetkazadi."
+    "Sayt anketalari shu chatga keladi. Tasdiqlash uchun anketa ostidagi "
+    "<b>✅ Tasdiqlash</b> tugmasini bosing yoki xabarga <b>Reply</b> qilib yozing "
+    "(Reply ham tasdiq hisoblanadi va foydalanuvchiga yetkaziladi)."
 )
 
 
 def back_to_site_keyboard():
-    """SITE_URL o'rnatilgan bo'lsa 'Saytga qaytish' tugmasini beradi."""
     if not config.SITE_URL:
         return None
     return {"inline_keyboard": [[{"text": "🌐 Saytga qaytish", "url": config.SITE_URL}]]}
+
+
+def approve_keyboard(user_chat_id):
+    return {"inline_keyboard": [[
+        {"text": "✅ Tasdiqlash", "callback_data": f"approve:{user_chat_id}"}
+    ]]}
 
 
 # ============================================================
@@ -75,8 +79,6 @@ def back_to_site_keyboard():
 
 @app.post("/webhook")
 async def telegram_webhook(request: Request):
-    # Xavfsizlik: WEBHOOK_SECRET o'rnatilgan bo'lsa, so'rov haqiqatan Telegram'dan
-    # kelganini tekshiramiz.
     if config.WEBHOOK_SECRET:
         token = request.headers.get("X-Telegram-Bot-Api-Secret-Token", "")
         if token != config.WEBHOOK_SECRET:
@@ -87,9 +89,10 @@ async def telegram_webhook(request: Request):
     except Exception:
         return {"ok": True}
 
-    # Handler xatosi Render Logs'da ko'rinsin, Telegram'ga 500 qaytmasin.
     try:
-        if "message" in data:
+        if "callback_query" in data:
+            await handle_callback_query(data["callback_query"])
+        elif "message" in data:
             await handle_message(data["message"])
     except Exception:
         traceback.print_exc()
@@ -98,8 +101,30 @@ async def telegram_webhook(request: Request):
 
 
 def is_admin(chat_id) -> bool:
-    """chat_id adminlardan biri ekanligini tekshiradi (bir yoki bir nechta admin)."""
     return str(chat_id) in {str(a) for a in config.ADMIN_CHAT_IDS}
+
+
+def approve_user(user_chat_id):
+    """Foydalanuvchini tasdiqlaydi va unga xabar beradi."""
+    storage.set_setting(f"status:{user_chat_id}", "approved")
+    try:
+        send_message(int(user_chat_id), APPROVED_USER_TEXT, reply_markup=back_to_site_keyboard())
+    except Exception:
+        pass
+
+
+async def handle_callback_query(cq: dict):
+    from_chat = cq["message"]["chat"]["id"]
+    data = cq.get("data", "")
+
+    if data.startswith("approve:") and is_admin(from_chat):
+        target = data.split(":", 1)[1]
+        approve_user(target)
+        answer_callback_query(cq["id"], text="Tasdiqlandi ✅")
+        send_message(from_chat, "✅ Foydalanuvchi tasdiqlandi — saytda unga tarif tanlash ochildi.")
+        return
+
+    answer_callback_query(cq["id"])
 
 
 async def handle_message(msg: dict):
@@ -107,20 +132,21 @@ async def handle_message(msg: dict):
     text = msg.get("text", "")
     admin = is_admin(chat_id)
 
-    # 1) Admin javob (reply) yozganida -> tegishli foydalanuvchiga yetkazish.
+    # 1) Admin javob (reply) -> foydalanuvchiga yetkazish + tasdiq (Reply = tasdiq)
     if admin and msg.get("reply_to_message"):
         replied_id = msg["reply_to_message"]["message_id"]
         user_chat_id = storage.get_user_for_admin_message(chat_id, replied_id)
         if user_chat_id:
             if text:
-                # Admin erkin matni — HTML formatlashsiz (< yoki & xato bermasin).
                 send_message(user_chat_id, text, parse_mode=None)
+                # admin javobini saytda ham ko'rsatish uchun saqlaymiz
+                storage.set_setting(f"reply:{user_chat_id}", text)
             else:
-                # rasm/fayl — copyMessage (forward emas, admin sizib chiqmaydi).
                 copy_message(user_chat_id, chat_id, msg["message_id"])
+            approve_user(user_chat_id)  # Reply ham tasdiq
         return
 
-    # 2) /start — ro'yxatdan o'tkazish (yoki admin uchun qisqa ma'lumot)
+    # 2) /start
     if text.startswith("/start"):
         if admin:
             send_message(chat_id, ADMIN_INFO_TEXT)
@@ -132,11 +158,11 @@ async def handle_message(msg: dict):
         send_message(chat_id, REGISTERED_TEXT, reply_markup=back_to_site_keyboard())
         return
 
-    # 3) Admin oddiy (reply bo'lmagan) xabar yozsa — e'tiborsiz qoldiramiz
+    # 3) Admin oddiy xabar -> e'tiborsiz
     if admin:
         return
 
-    # 4) Oddiy foydalanuvchi xabari -> HAR BIR adminga forward + relay
+    # 4) Oddiy foydalanuvchi xabari -> har bir adminga forward + relay
     for admin_id in config.ADMIN_CHAT_IDS:
         fwd = forward_message(admin_id, chat_id, msg["message_id"])
         if fwd.get("ok"):
@@ -153,6 +179,20 @@ async def check_registration(session_id: str):
     return {"registered": chat_id is not None}
 
 
+@app.get("/api/status/{session_id}")
+async def user_status(session_id: str):
+    """Sayt shu endpoint orqali holatni kuzatadi:
+    registered -> anketa formasi ochiladi
+    approved   -> tarif tanlash ochiladi (admin tasdiqlagan)
+    admin_message -> admin javobini saytda ko'rsatish uchun."""
+    chat_id = storage.get_chat_id_for_session(session_id)
+    if not chat_id:
+        return {"registered": False, "approved": False, "admin_message": ""}
+    approved = storage.get_setting(f"status:{chat_id}") == "approved"
+    admin_message = storage.get_setting(f"reply:{chat_id}") or ""
+    return {"registered": True, "approved": approved, "admin_message": admin_message}
+
+
 @app.post("/api/survey")
 async def submit_survey(request: Request):
     try:
@@ -165,7 +205,6 @@ async def submit_survey(request: Request):
     if not chat_id:
         return {"ok": False, "error": "not_registered"}
 
-    # Foydalanuvchi kiritgan qiymatlarni HTML uchun xavfsizlaymiz.
     def esc(key):
         return html.escape(str(body.get(key, "-")))
 
@@ -177,12 +216,13 @@ async def submit_survey(request: Request):
         f"💰 Balans: {esc('balance')}\n"
         f"📉 Zarar: {esc('loss')}\n"
         f"💭 Xato sababi: {esc('cause')}\n\n"
-        "↩️ Foydalanuvchi bilan gaplashish uchun shu xabarga <b>Reply</b> qiling."
+        "Tasdiqlash uchun quyidagi tugmani bosing yoki shu xabarga <b>Reply</b> qiling."
     )
 
+    kb = approve_keyboard(chat_id)
     sent_any = False
     for admin_id in config.ADMIN_CHAT_IDS:
-        result = send_message(admin_id, text)
+        result = send_message(admin_id, text, reply_markup=kb)
         if result.get("ok"):
             storage.save_relay(admin_id, result["result"]["message_id"], chat_id)
             sent_any = True

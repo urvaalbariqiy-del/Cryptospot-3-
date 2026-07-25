@@ -259,7 +259,7 @@
           <li><span class="check">✓</span><b data-i18n="pricing.vip5">3 oylik VIP 3% obunasi — BONUS</b></li>
           <li><span class="check">✓</span><b data-i18n="pricing.vip6">Dastur davomiyligi: 2 oy</b></li>
         </ul>
-        <a href="#survey" class="btn btn-outline btn-block" data-i18n="pricing.vip_cta">VIP tarifni tanlash</a>
+        <a href="#survey" class="btn btn-outline btn-block tariff-btn" data-tariff="vip" data-i18n="pricing.vip_cta">VIP tarifni tanlash</a>
       </div>
       <div class="card price-card featured">
         <div class="price-tag" data-i18n="pricing.prem_badge">Tavsiya etiladi</div>
@@ -272,7 +272,7 @@
           <li><span class="check">✓</span><b data-i18n="pricing.prem3">Shaxsan foydalanadigan CS3% indikatoriga dostup</b></li>
           <li><span class="check">✓</span><b data-i18n="pricing.prem4">Bir martalik to'lov — muddatsiz community</b></li>
         </ul>
-        <a href="#survey" class="btn btn-primary btn-block" data-i18n="pricing.prem_cta">Premium tarifni tanlash</a>
+        <a href="#survey" class="btn btn-primary btn-block tariff-btn" data-tariff="premium" data-i18n="pricing.prem_cta">Premium tarifni tanlash</a>
       </div>
     </div>
   </div>
@@ -287,6 +287,7 @@
         <h2 style="font-size:clamp(24px,3vw,34px);margin:16px 0 14px" data-i18n="survey.title">Dasturga qo'shilish uchun anketani to'ldiring</h2>
         <p class="muted" style="margin-bottom:20px" data-i18n="survey.lead">Anketani to'ldirish majburiy.</p>
         <div class="notice">⚠️ <span data-i18n="footer.reminder">Eslatma: faqat SPOT yo'nalishida. Qolgan barcha yo'nalishlar shariatga ko'ra harom hisoblanadi.</span></div>
+        <p class="form-status" id="tariffNote"></p>
       </div>
       <div class="card reveal" id="surveyFormWrap" style="display:none;padding:0">
       <div id="surveyGate" class="form-card" style="display:block">
@@ -330,6 +331,26 @@
         <p class="form-status" id="surveyStatus"></p>
         <a href="#" data-link="bot" target="_blank" id="surveyFallback" class="btn btn-outline btn-block" style="display:none;margin-top:10px" data-i18n="survey.fallback">Botga qo'lda yozish</a>
       </form>
+
+      <!-- Kutish: anketa yuborildi, admin ko'rib chiqmoqda -->
+      <div id="surveyPending" class="form-card" style="display:none;text-align:center">
+        <div style="font-size:42px;margin-bottom:12px">⏳</div>
+        <p style="font-size:16px;font-weight:700;margin:0 0 6px" data-i18n="survey.pending_title">Anketangiz yuborildi!</p>
+        <p class="muted" style="font-size:14px;line-height:1.6;margin:0" data-i18n="survey.pending_text">Admin ko'rib chiqmoqda. Tasdiqlangach, shu yerda tarif tanlash ochiladi.</p>
+        <p class="form-status" id="pendingAdminMsg" style="margin-top:14px"></p>
+      </div>
+
+      <!-- Tasdiqlangan: tarif tanlash -->
+      <div id="surveyApproved" class="form-card" style="display:none;text-align:center">
+        <div style="font-size:42px;margin-bottom:12px">✅</div>
+        <p style="font-size:17px;font-weight:700;margin:0 0 6px" data-i18n="survey.approved_title">Tasdiqlandingiz! 🎉</p>
+        <p class="muted" style="font-size:14px;line-height:1.6;margin:0 0 20px" data-i18n="survey.approved_text">Endi o'zingizga mos tarifni tanlang — to'lov manejer bot orqali.</p>
+        <p class="form-status" id="approvedAdminMsg" style="margin-bottom:16px"></p>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <a href="#" data-link="manager" target="_blank" class="btn btn-outline btn-block"><b>VIP TARIF</b> — $119</a>
+          <a href="#" data-link="manager" target="_blank" class="btn btn-primary btn-block"><b>PREMIUM TARIF</b> — $249</a>
+        </div>
+      </div>
       </div>
     </div>
   </div>
