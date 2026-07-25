@@ -1,0 +1,14 @@
+# Maxfiy sozlamalar — hech qachon commit qilinmaydi
+backend/.env
+.env
+
+# SQLite bazasi va Python artefaktlari
+backend/bot_data.db
+*.db
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
