@@ -24,6 +24,7 @@ yuboradi). Polling emas — Render.com kabi doimiy ishlaydigan web-service uchun
 webhook to'g'ri yechim.
 """
 import html
+import traceback
 
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
@@ -103,6 +104,15 @@ def vip3_tariff_keyboard():
     }
 
 
+def admin_menu_keyboard():
+    return {
+        "inline_keyboard": [
+            [{"text": "💳 Hamyonni ko'rish", "callback_data": "admin_wallet"}],
+            [{"text": "✏️ Hamyonni o'zgartirish", "callback_data": "admin_setwallet"}],
+        ]
+    }
+
+
 def get_wallet_info():
     """Admin bot orqali /setwallet bilan kiritgan hamyonni qaytaradi;
     agar hali kiritilmagan bo'lsa, config'dagi standart qiymatga tushadi."""
@@ -146,13 +156,15 @@ async def telegram_webhook(request: Request):
     except Exception:
         return {"ok": True}
 
-    if "callback_query" in data:
-        await handle_callback_query(data["callback_query"])
-        return {"ok": True}
-
-    if "message" in data:
-        await handle_message(data["message"])
-        return {"ok": True}
+    # Har qanday handler xatosi Render Logs'da ko'rinishi va Telegram'ga 500
+    # qaytmasligi uchun (aks holda Telegram so'rovni qayta-qayta yuboraveradi).
+    try:
+        if "callback_query" in data:
+            await handle_callback_query(data["callback_query"])
+        elif "message" in data:
+            await handle_message(data["message"])
+    except Exception:
+        traceback.print_exc()
 
     return {"ok": True}
 
@@ -189,10 +201,30 @@ async def handle_message(msg: dict):
                 copy_message(user_chat_id, chat_id, msg["message_id"])
         return
 
+    # 1b) Admin "✏️ Hamyonni o'zgartirish" tugmasini bosgach — keyingi (buyruq
+    #     bo'lmagan) xabari yangi hamyon sifatida qabul qilinadi.
+    if admin and text and not text.startswith("/") and \
+            storage.get_setting(f"admin_state:{chat_id}") == "awaiting_wallet":
+        storage.set_setting(f"admin_state:{chat_id}", "")  # holatni tozalaymiz
+        parts = text.split()
+        if not parts:
+            send_message(chat_id, "Bekor qilindi.", reply_markup=admin_menu_keyboard())
+            return
+        address = parts[0]
+        network = parts[1] if len(parts) > 1 else "TRC20"
+        storage.set_setting("usdt_wallet_address", address)
+        storage.set_setting("usdt_wallet_network", network)
+        send_message(
+            chat_id,
+            f"✅ To'lov hamyoni yangilandi:\n<code>{address}</code>\nTarmoq: <b>{network}</b>",
+            reply_markup=admin_menu_keyboard(),
+        )
+        return
+
     # 2) /start (registratsiya)
     if text.startswith("/start"):
         if admin:
-            send_message(chat_id, ADMIN_HELP_TEXT)
+            send_message(chat_id, ADMIN_PANEL_TEXT, reply_markup=admin_menu_keyboard())
             return
         parts = text.split(maxsplit=1)
         payload = parts[1].strip() if len(parts) > 1 else ""
@@ -214,8 +246,14 @@ async def handle_message(msg: dict):
             storage.save_relay(admin_id, admin_message_id, chat_id)
 
 
+ADMIN_PANEL_TEXT = (
+    "🛠 <b>Admin panel</b>\n\n"
+    "Quyidagi tugmalardan foydalaning:"
+)
+
 ADMIN_HELP_TEXT = (
-    "🛠 <b>Admin buyruqlari</b>\n\n"
+    "🛠 <b>Admin panel</b>\n\n"
+    "Tugmalar orqali boshqaring (pastdagi menyu), yoki matnli buyruqlar:\n"
     "<code>/wallet</code> — hozirgi to'lov hamyonini ko'rsatadi\n"
     "<code>/setwallet MANZIL TARMOQ</code> — to'lov hamyonini yangilaydi\n"
     "Masalan: <code>/setwallet TXo1234...abcd TRC20</code>\n\n"
@@ -229,7 +267,7 @@ async def handle_admin_command(chat_id, text: str) -> bool:
             False — bu oddiy buyruq emas, davom etilsin (masalan /start)."""
 
     if text.startswith("/admin_help"):
-        send_message(chat_id, ADMIN_HELP_TEXT)
+        send_message(chat_id, ADMIN_HELP_TEXT, reply_markup=admin_menu_keyboard())
         return True
 
     if text.startswith("/wallet"):
@@ -268,6 +306,27 @@ async def handle_callback_query(cq: dict):
     chat_id = cq["message"]["chat"]["id"]
     action = cq.get("data", "")
     answer_callback_query(cq["id"])
+
+    # --- Admin panel tugmalari ---
+    if action in ("admin_wallet", "admin_setwallet"):
+        if not is_admin(chat_id):
+            return
+        if action == "admin_wallet":
+            address, network = get_wallet_info()
+            send_message(
+                chat_id,
+                f"💳 Hozirgi to'lov hamyoni:\n<code>{address}</code>\nTarmoq: <b>{network}</b>",
+                reply_markup=admin_menu_keyboard(),
+            )
+        else:  # admin_setwallet — keyingi xabarni hamyon sifatida kutamiz
+            storage.set_setting(f"admin_state:{chat_id}", "awaiting_wallet")
+            send_message(
+                chat_id,
+                "✏️ Yangi hamyon manzili va tarmog'ini <b>bitta xabarda</b> yuboring.\n"
+                "Masalan:\n<code>TXo1234abcd TRC20</code>\n\n"
+                "(Tarmoqni yozmasangiz, standart <b>TRC20</b> olinadi.)",
+            )
+        return
 
     if action == "menu_execution_lab":
         send_message(chat_id, EXECUTION_LAB_TEXT)
