@@ -42,6 +42,11 @@ const DICTS = {
     "about2.title": "CS3% Execution Lab — bajarish laboratoriyasi",
     "about2.text": "Bu shunchaki navbatdagi kurs emas. CS3% Execution Lab — 4 yillik real tajriba asosida qurilgan 2 oylik amaliy dastur bo'lib, sizni bozor tahlilini emas, balki psixologiya, temir intizom va o'z vaqtida aniq qaror qabul qilish — ya'ni Execution mahoratiga o'rgatadi. Faqat SPOT yo'nalishida, jonli sessiyalar va real amaliyot bilan savdolaringizni to'liq nazorat ostiga olasiz.",
 
+    "social.title": "Bizni ijtimoiy tarmoqlarda kuzatib boring",
+    "social.tg": "Asosiy kanal",
+    "social.ig": "Rasmiy sahifa",
+    "social.yt": "YouTube kanal",
+
     "program.eyebrow": "CS3% Execution Lab",
     "program.title": "2 oylik dastur ichida nima bor?",
     "program.lead": "Bu shunchaki navbatdagi nazariy kurs emas — real bozorda xatosiz savdo qilish uchun maxsus laboratoriya.",
@@ -220,6 +225,11 @@ const DICTS = {
     "about2.eyebrow": "О проекте",
     "about2.title": "CS3% Execution Lab — лаборатория исполнения",
     "about2.text": "Это не очередной курс. CS3% Execution Lab — 2-месячная практическая программа, построенная на 4-летнем реальном опыте. Мы учим не анализу рынка, а психологии, железной дисциплине и своевременному принятию решений — искусству Execution. Только направление SPOT, живые сессии и реальная практика, чтобы вы полностью контролировали свои сделки.",
+
+    "social.title": "Подписывайтесь на нас в соцсетях",
+    "social.tg": "Основной канал",
+    "social.ig": "Официальная страница",
+    "social.yt": "YouTube канал",
 
     "program.eyebrow": "CS3% Execution Lab",
     "program.title": "Что входит в 2-месячную программу?",

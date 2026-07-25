@@ -502,6 +502,25 @@ footer.site-footer{border-top:1px solid var(--border);padding:52px 0 30px}
 }
 .feature-card:hover,.tcard:hover,.step-card:hover{transform:translateY(-4px)}
 
+/* Ijtimoiy tarmoq kartalari */
+.social-grid{gap:20px}
+.social-card{
+  display:flex;align-items:center;gap:16px;padding:20px 22px;
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.social-card:hover{transform:translateY(-4px)}
+.social-ic{
+  width:52px;height:52px;border-radius:14px;flex-shrink:0;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 20px -8px rgba(0,0,0,.4);
+}
+.social-ic svg{width:26px;height:26px}
+.social-ic.tg{background:linear-gradient(135deg,#2AABEE,#229ED9)}
+.social-ic.ig{background:linear-gradient(135deg,#feda75,#fa7e1e 28%,#d62976 60%,#962fbf 80%,#4f5bd5)}
+.social-ic.yt{background:linear-gradient(135deg,#ff4e45,#d70000)}
+.social-tx b{display:block;font-size:16px;line-height:1.2}
+.social-tx span{font-size:13px;color:var(--muted)}
+
 /* ============================================================
    BLOCKCHAIN / CRYPTO ORQA FON (biroz blur bilan)
    ============================================================ */
