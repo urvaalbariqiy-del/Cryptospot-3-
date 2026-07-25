@@ -502,6 +502,27 @@ footer.site-footer{border-top:1px solid var(--border);padding:52px 0 30px}
 }
 .feature-card:hover,.tcard:hover,.step-card:hover{transform:translateY(-4px)}
 
+/* Fikrlar — kommentariya (chat bubble) uslubi */
+.tgrid{gap:22px}
+.tcard{
+  position:relative;
+  padding:20px 22px 16px;
+  border-radius:18px 18px 18px 5px;   /* chat bubble: pastki-chap burchagi o'tkir */
+}
+.tcard::before{                         /* 5 yulduz reyting (tepada) */
+  content:"★★★★★";
+  display:block;color:var(--gold);
+  font-size:13px;letter-spacing:3px;margin-bottom:12px;
+}
+.tcard::after{                          /* pastki-chap "tail" (bubble dumchasi) */
+  content:"";position:absolute;left:26px;bottom:-8px;
+  width:16px;height:16px;background:var(--card);
+  border-right:1px solid var(--border);border-bottom:1px solid var(--border);
+  transform:rotate(45deg);
+}
+.tcard p{font-size:14.5px;line-height:1.7;margin:0 0 16px}
+.tcard footer{border-top:1px solid var(--border);padding-top:14px}
+
 /* Ijtimoiy tarmoq kartalari */
 .social-grid{gap:20px}
 .social-card{
