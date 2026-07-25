@@ -11,7 +11,15 @@ load_dotenv()
 
 # --- Telegram ---
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "")
-ADMIN_CHAT_ID = os.environ.get("ADMIN_CHAT_ID", "")       # admin shaxsiy chat ID'si
+
+# Admin chat ID'lari. Bir nechta admin bo'lsa, vergul bilan ajrating:
+#   ADMIN_CHAT_IDS=5079059516,123456789
+# Moslik uchun eski bitta qiymatli ADMIN_CHAT_ID ham qo'llab-quvvatlanadi.
+_admin_raw = os.environ.get("ADMIN_CHAT_IDS", "") or os.environ.get("ADMIN_CHAT_ID", "")
+ADMIN_CHAT_IDS = [x.strip() for x in _admin_raw.split(",") if x.strip()]
+# "Asosiy" admin (birinchi ID) — ba'zi joylarda yagona qiymat kerak bo'lsa ishlatiladi.
+ADMIN_CHAT_ID = ADMIN_CHAT_IDS[0] if ADMIN_CHAT_IDS else ""
+
 CHANNEL_ID = os.environ.get("CHANNEL_ID", "")              # maxfiy admin kanal ID'si
 BOT_USERNAME = os.environ.get("BOT_USERNAME", "")          # masalan: cryptospot3_bot (@ belgisisiz)
 

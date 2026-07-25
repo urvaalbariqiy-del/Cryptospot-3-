@@ -24,11 +24,19 @@ def init_db():
                 created_at INTEGER NOT NULL
             )
         """)
+        # Eski (bitta admin) sxemadan yangi (ko'p admin) sxemaga o'tish.
+        # relay — vaqtinchalik xabar bog'lanishi, shuning uchun eski jadvalni
+        # tashlab qayta yaratish xavfsiz (muhim ma'lumot yo'qolmaydi).
+        cols = [r[1] for r in conn.execute("PRAGMA table_info(relay)").fetchall()]
+        if cols and "admin_chat_id" not in cols:
+            conn.execute("DROP TABLE relay")
         conn.execute("""
             CREATE TABLE IF NOT EXISTS relay (
-                admin_message_id INTEGER PRIMARY KEY,
+                admin_chat_id INTEGER NOT NULL,
+                admin_message_id INTEGER NOT NULL,
                 user_chat_id INTEGER NOT NULL,
-                created_at INTEGER NOT NULL
+                created_at INTEGER NOT NULL,
+                PRIMARY KEY (admin_chat_id, admin_message_id)
             )
         """)
         conn.execute("""
@@ -80,19 +88,21 @@ def get_chat_id_for_session(session_id: str):
 
 # ---------- relay (admin <-> user ikki tomonlama xabar almashish) ----------
 
-def save_relay(admin_message_id: int, user_chat_id: int):
+def save_relay(admin_chat_id: int, admin_message_id: int, user_chat_id: int):
     with get_conn() as conn:
         conn.execute(
-            "INSERT OR REPLACE INTO relay (admin_message_id, user_chat_id, created_at) VALUES (?, ?, ?)",
-            (admin_message_id, user_chat_id, int(time.time())),
+            "INSERT OR REPLACE INTO relay (admin_chat_id, admin_message_id, user_chat_id, created_at) "
+            "VALUES (?, ?, ?, ?)",
+            (admin_chat_id, admin_message_id, user_chat_id, int(time.time())),
         )
         conn.commit()
 
 
-def get_user_for_admin_message(admin_message_id: int):
+def get_user_for_admin_message(admin_chat_id: int, admin_message_id: int):
     with get_conn() as conn:
         row = conn.execute(
-            "SELECT user_chat_id FROM relay WHERE admin_message_id = ?", (admin_message_id,)
+            "SELECT user_chat_id FROM relay WHERE admin_chat_id = ? AND admin_message_id = ?",
+            (admin_chat_id, admin_message_id),
         ).fetchone()
         return row[0] if row else None
 

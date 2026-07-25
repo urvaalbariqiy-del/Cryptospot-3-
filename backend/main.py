@@ -157,21 +157,27 @@ async def telegram_webhook(request: Request):
     return {"ok": True}
 
 
+def is_admin(chat_id) -> bool:
+    """chat_id adminlardan biri ekanligini tekshiradi (bir yoki bir nechta admin)."""
+    return str(chat_id) in {str(a) for a in config.ADMIN_CHAT_IDS}
+
+
 async def handle_message(msg: dict):
     chat_id = msg["chat"]["id"]
     text = msg.get("text", "")
-    is_admin = str(chat_id) == str(config.ADMIN_CHAT_ID)
+    admin = is_admin(chat_id)
 
     # 0) Admin uchun maxsus buyruqlar (hamyonni bot orqali kiritish/ko'rish)
-    if is_admin and text.startswith("/"):
+    if admin and text.startswith("/"):
         handled = await handle_admin_command(chat_id, text)
         if handled:
             return
 
-    # 1) Admin javob (reply) yozganida -> tegishli foydalanuvchiga yetkazish
-    if is_admin and msg.get("reply_to_message"):
+    # 1) Admin javob (reply) yozganida -> tegishli foydalanuvchiga yetkazish.
+    #    Relay shu admin chatidagi xabar ID'si bo'yicha qidiriladi.
+    if admin and msg.get("reply_to_message"):
         replied_id = msg["reply_to_message"]["message_id"]
-        user_chat_id = storage.get_user_for_admin_message(replied_id)
+        user_chat_id = storage.get_user_for_admin_message(chat_id, replied_id)
         if user_chat_id:
             if text:
                 # Admin erkin yozgan matn — HTML formatlashsiz yuboramiz, aks holda
@@ -180,12 +186,12 @@ async def handle_message(msg: dict):
             else:
                 # rasm/fayl bo'lsa — copyMessage orqali yuboramiz (forward emas),
                 # shunda foydalanuvchida "admin'dan forward qilindi" ko'rinmaydi.
-                copy_message(user_chat_id, config.ADMIN_CHAT_ID, msg["message_id"])
+                copy_message(user_chat_id, chat_id, msg["message_id"])
         return
 
     # 2) /start (registratsiya)
     if text.startswith("/start"):
-        if is_admin:
+        if admin:
             send_message(chat_id, ADMIN_HELP_TEXT)
             return
         parts = text.split(maxsplit=1)
@@ -196,14 +202,16 @@ async def handle_message(msg: dict):
         return
 
     # 3) Admin panelda oddiy (reply bo'lmagan) xabar yozsa — e'tiborsiz qoldiramiz
-    if is_admin:
+    if admin:
         return
 
-    # 4) Oddiy foydalanuvchi xabari (savol, chek rasmi va h.k.) -> admin chatga forward
-    fwd = forward_message(config.ADMIN_CHAT_ID, chat_id, msg["message_id"])
-    if fwd.get("ok"):
-        admin_message_id = fwd["result"]["message_id"]
-        storage.save_relay(admin_message_id, chat_id)
+    # 4) Oddiy foydalanuvchi xabari (savol, chek rasmi va h.k.) -> HAR BIR admin
+    #    chatga forward qilinadi va har biri uchun alohida relay yoziladi.
+    for admin_id in config.ADMIN_CHAT_IDS:
+        fwd = forward_message(admin_id, chat_id, msg["message_id"])
+        if fwd.get("ok"):
+            admin_message_id = fwd["result"]["message_id"]
+            storage.save_relay(admin_id, admin_message_id, chat_id)
 
 
 ADMIN_HELP_TEXT = (
@@ -307,11 +315,16 @@ async def submit_survey(request: Request):
         f"💭 Xato sababi: {esc('cause')}\n\n"
         "↩️ Foydalanuvchi bilan gaplashish uchun shu xabarga <b>Reply</b> qiling."
     )
-    result = send_message(config.ADMIN_CHAT_ID, text)
+    # Anketa har bir adminga yuboriladi; har biri "Reply" orqali javob bera olishi
+    # uchun alohida relay yoziladi.
+    sent_any = False
+    for admin_id in config.ADMIN_CHAT_IDS:
+        result = send_message(admin_id, text)
+        if result.get("ok"):
+            storage.save_relay(admin_id, result["result"]["message_id"], chat_id)
+            sent_any = True
 
-    if result.get("ok"):
-        admin_message_id = result["result"]["message_id"]
-        storage.save_relay(admin_message_id, chat_id)
+    if sent_any:
         return {"ok": True}
 
     return {"ok": False, "error": "telegram_send_failed"}

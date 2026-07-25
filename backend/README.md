@@ -15,7 +15,7 @@ Bu backend uchta vazifani bajaradi:
    - **Start Command**: `uvicorn main:app --host 0.0.0.0 --port $PORT`
 4. **Environment** bo'limida quyidagi o'zgaruvchilarni qo'lda kiriting (Render dashboard'ida, `.env` fayl emas):
    - `BOT_TOKEN`
-   - `ADMIN_CHAT_ID`
+   - `ADMIN_CHAT_IDS` — bitta yoki bir nechta admin chat ID, vergul bilan ajratilgan (masalan `5079059516,123456789`). Bitta bo'lsa ham shu o'zgaruvchini ishlating. (Eski `ADMIN_CHAT_ID` nomi ham qo'llab-quvvatlanadi.)
    - `CHANNEL_ID`
    - `BOT_USERNAME`
    - `WEBHOOK_SECRET` — istalgan uzun tasodifiy satr (masalan `openssl rand -hex 16` chiqargan qiymat). Webhook xavfsizligi uchun; tavsiya etiladi.
