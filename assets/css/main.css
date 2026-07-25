@@ -404,21 +404,21 @@ footer.site-footer{border-top:1px solid var(--border);padding:52px 0 30px}
    (faqat [data-theme="light"] — qorong'i rejimga tegmaydi)
    ============================================================ */
 [data-theme="light"]{
-  --bg:#f6f8fc;        /* salqin, premium oq */
-  --bg-alt:#eef1f7;    /* salqin och kulrang */
-  --card:#ffffff;
-  --fg:#141821;
-  --muted:#59606e;
-  --border:#e6eaf2;    /* salqin chegara */
+  --bg:#e5eaf2;        /* to'qroq, moviyga yaqin ko'k-kulrang (slate) */
+  --bg-alt:#dbe2ed;    /* biroz to'qroq slate */
+  --card:#ffffff;      /* oq kartalar fon ustida chuqurroq ko'rinadi */
+  --fg:#131722;
+  --muted:#525a6a;
+  --border:#d3dbe8;    /* salqin chegara */
   --gold:#a97b1e;      /* yorug'da o'qiladigan boy oltin */
   --gold-2:#c99a34;
-  --shadow:0 1px 2px rgba(20,28,50,.05), 0 18px 40px -22px rgba(20,28,50,.22);
+  --shadow:0 1px 2px rgba(18,26,48,.06), 0 20px 44px -22px rgba(18,26,48,.26);
 }
 
 /* Umumiy fon — yassi emas, nozik ko'k nur bilan chuqurlik */
 [data-theme="light"] body{
   background:
-    radial-gradient(72% 42% at 50% -10%, rgba(58,140,214,.10), transparent 62%),
+    radial-gradient(72% 42% at 50% -10%, rgba(58,140,214,.12), transparent 62%),
     var(--bg);
 }
 
@@ -426,21 +426,21 @@ footer.site-footer{border-top:1px solid var(--border);padding:52px 0 30px}
 [data-theme="light"] .hero{
   background:
     radial-gradient(56% 46% at 8% -8%, rgba(201,154,52,.16), transparent 60%),
-    radial-gradient(52% 52% at 95% -4%, rgba(58,140,214,.20), transparent 60%),
-    linear-gradient(180deg,#fbfcff,#f6f8fc);
+    radial-gradient(52% 52% at 95% -4%, rgba(58,140,214,.22), transparent 60%),
+    linear-gradient(180deg,#eef2f8,#e5eaf2);
 }
 
 /* Kartalar — aniq, qatlamli soya (premium chuqurlik) */
 [data-theme="light"] .card{
-  border-color:#e9edf4;
-  box-shadow:0 1px 2px rgba(20,28,50,.04), 0 16px 34px -18px rgba(20,28,50,.16);
+  border-color:#e4e9f1;
+  box-shadow:0 1px 2px rgba(18,26,48,.05), 0 18px 38px -18px rgba(18,26,48,.20);
 }
 
 /* Eyebrow — kontrast oltin yorliq */
 [data-theme="light"] .eyebrow{
   color:#946a17;
-  background:linear-gradient(90deg, rgba(201,154,52,.15), rgba(58,140,214,.12));
-  border-color:#e3e8f0;
+  background:linear-gradient(90deg, rgba(201,154,52,.15), rgba(58,140,214,.14));
+  border-color:#d8dfea;
 }
 
 /* Gradient matn — yorug'da boy, o'qiladigan ranglar */
@@ -478,14 +478,14 @@ footer.site-footer{border-top:1px solid var(--border);padding:52px 0 30px}
 [data-theme="light"] .field input[type=number],
 [data-theme="light"] .field select,
 [data-theme="light"] .field textarea{
-  background:#f6f8fc;border-color:#e3e8f0;
+  background:#eef2f8;border-color:#d8dfea;
 }
 
 /* Navbar — yorug'da scroll'da nozik soya */
 [data-theme="light"] .nav.scrolled{box-shadow:0 10px 34px -22px rgba(30,30,50,.28)}
 
 /* Ikon tugmalar — yorug'da nozik chegara */
-[data-theme="light"] .icon-btn:hover{background:#e9edf4}
+[data-theme="light"] .icon-btn:hover{background:#dbe2ed}
 
 /* ============================================================
    UMUMIY POLISH (ikkala rejimda ham)
