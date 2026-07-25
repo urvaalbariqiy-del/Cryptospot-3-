@@ -3,7 +3,7 @@
 // ==========================================================
 // Backend (bot) Render.com'ga deploy qilingandan so'ng, uning URL'ini shu yerga yozing:
 window.SITE_CONFIG = {
-  apiBaseUrl: "https://YOUR-BACKEND-URL.onrender.com",
+  apiBaseUrl: "https://cryptospot-3.onrender.com",
   telegramBotUsername: "YOUR_BOT_USERNAME", // @ belgisisiz, masalan: cryptospot3_bot
   channels: {
     telegram: "https://t.me/cryptospot3",
