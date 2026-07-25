@@ -53,6 +53,12 @@ APPROVED_USER_TEXT = (
     "<b>tarifni tanlang</b> — to'lov va kirish manejer bot orqali amalga oshadi."
 )
 
+REJECTED_USER_TEXT = (
+    "❌ <b>Afsuski</b>, anketangiz hozircha tasdiqlanmadi.\n\n"
+    "Savollaringiz bo'lsa shu botga yozing — admin javob beradi. Anketani "
+    "saytda qayta yuborishingiz ham mumkin."
+)
+
 ADMIN_INFO_TEXT = (
     "🛠 <b>Anketa boti</b>\n\n"
     "Sayt anketalari shu chatga keladi. Tasdiqlash uchun anketa ostidagi "
@@ -67,9 +73,10 @@ def back_to_site_keyboard():
     return {"inline_keyboard": [[{"text": "🌐 Saytga qaytish", "url": config.SITE_URL}]]}
 
 
-def approve_keyboard(user_chat_id):
+def review_keyboard(user_chat_id):
     return {"inline_keyboard": [[
-        {"text": "✅ Tasdiqlash", "callback_data": f"approve:{user_chat_id}"}
+        {"text": "✅ Tasdiqlash", "callback_data": f"approve:{user_chat_id}"},
+        {"text": "❌ Rad etish", "callback_data": f"reject:{user_chat_id}"},
     ]]}
 
 
@@ -113,6 +120,15 @@ def approve_user(user_chat_id):
         pass
 
 
+def reject_user(user_chat_id):
+    """Foydalanuvchini rad etadi va unga xabar beradi."""
+    storage.set_setting(f"status:{user_chat_id}", "rejected")
+    try:
+        send_message(int(user_chat_id), REJECTED_USER_TEXT)
+    except Exception:
+        pass
+
+
 async def handle_callback_query(cq: dict):
     from_chat = cq["message"]["chat"]["id"]
     data = cq.get("data", "")
@@ -122,6 +138,13 @@ async def handle_callback_query(cq: dict):
         approve_user(target)
         answer_callback_query(cq["id"], text="Tasdiqlandi ✅")
         send_message(from_chat, "✅ Foydalanuvchi tasdiqlandi — saytda unga tarif tanlash ochildi.")
+        return
+
+    if data.startswith("reject:") and is_admin(from_chat):
+        target = data.split(":", 1)[1]
+        reject_user(target)
+        answer_callback_query(cq["id"], text="Rad etildi ❌")
+        send_message(from_chat, "❌ Foydalanuvchi rad etildi.")
         return
 
     answer_callback_query(cq["id"])
@@ -187,10 +210,15 @@ async def user_status(session_id: str):
     admin_message -> admin javobini saytda ko'rsatish uchun."""
     chat_id = storage.get_chat_id_for_session(session_id)
     if not chat_id:
-        return {"registered": False, "approved": False, "admin_message": ""}
-    approved = storage.get_setting(f"status:{chat_id}") == "approved"
+        return {"registered": False, "approved": False, "rejected": False, "admin_message": ""}
+    raw = storage.get_setting(f"status:{chat_id}")
     admin_message = storage.get_setting(f"reply:{chat_id}") or ""
-    return {"registered": True, "approved": approved, "admin_message": admin_message}
+    return {
+        "registered": True,
+        "approved": raw == "approved",
+        "rejected": raw == "rejected",
+        "admin_message": admin_message,
+    }
 
 
 @app.post("/api/survey")
@@ -219,7 +247,10 @@ async def submit_survey(request: Request):
         "Tasdiqlash uchun quyidagi tugmani bosing yoki shu xabarga <b>Reply</b> qiling."
     )
 
-    kb = approve_keyboard(chat_id)
+    # Qayta yuborilsa ham holat "pending"ga tushadi (avvalgi rad etish/tasdiq tozalanadi).
+    storage.set_setting(f"status:{chat_id}", "pending")
+
+    kb = review_keyboard(chat_id)
     sent_any = False
     for admin_id in config.ADMIN_CHAT_IDS:
         result = send_message(admin_id, text, reply_markup=kb)

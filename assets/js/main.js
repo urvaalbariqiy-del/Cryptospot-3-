@@ -160,6 +160,9 @@ const DICTS = {
     "survey.approved_title": "Tasdiqlandingiz! 🎉",
     "survey.approved_text": "Endi o'zingizga mos tarifni tanlang — to'lov va kirish manejer bot orqali.",
     "survey.need_anketa": "Avval anketani to'ldiring va admin tasdiqlashini kuting.",
+    "survey.rejected_title": "Anketa tasdiqlanmadi",
+    "survey.rejected_text": "Afsuski, hozircha tasdiqlanmadingiz. Anketani qayta yuborishingiz mumkin.",
+    "survey.retry": "Anketani qayta yuborish",
 
     "cta.title": "Tasodifiy savdolardan charchadingizmi?",
     "cta.sub": "CS3% Execution Lab bilan o'z savdolaringizni nazorat ostiga oling va professional treyderga aylaning.",
@@ -332,6 +335,9 @@ const DICTS = {
     "survey.approved_title": "Вы одобрены! 🎉",
     "survey.approved_text": "Теперь выберите подходящий тариф — оплата и доступ через менеджер-бот.",
     "survey.need_anketa": "Сначала заполните анкету и дождитесь одобрения администратора.",
+    "survey.rejected_title": "Анкета не одобрена",
+    "survey.rejected_text": "К сожалению, пока не одобрено. Вы можете отправить анкету повторно.",
+    "survey.retry": "Отправить анкету заново",
 
     "cta.title": "Устали от случайных сделок?",
     "cta.sub": "С CS3% Execution Lab возьмите свою торговлю под контроль и станьте профессиональным трейдером.",
@@ -447,16 +453,16 @@ function setSurveyState(state, data){
   window.__surveyState = state;
   const wrap = document.getElementById("surveyFormWrap");
   if(wrap) wrap.style.display = "block";
-  const map = { gate:"surveyGate", form:"surveyForm", pending:"surveyPending", approved:"surveyApproved" };
+  const map = { gate:"surveyGate", form:"surveyForm", pending:"surveyPending", approved:"surveyApproved", rejected:"surveyRejected" };
   Object.entries(map).forEach(([k,id])=>{
     const el = document.getElementById(id);
     if(el) el.style.display = (k === state) ? "block" : "none";
   });
   if(data && data.admin_message){
-    const target = state === "approved" ? "approvedAdminMsg" : (state === "pending" ? "pendingAdminMsg" : null);
+    const target = { approved:"approvedAdminMsg", pending:"pendingAdminMsg", rejected:"rejectedAdminMsg" }[state];
     if(target){
       const m = document.getElementById(target);
-      if(m){ m.textContent = "Admin: " + data.admin_message; m.className = "form-status show ok"; }
+      if(m){ m.textContent = "Admin: " + data.admin_message; m.className = "form-status show " + (state === "rejected" ? "err" : "ok"); }
     }
   }
 }
@@ -469,6 +475,9 @@ function startStatusPolling(){
     if(st && st.approved){
       clearInterval(__statusPoll); __statusPoll = null;
       setSurveyState("approved", st);
+    } else if(st && st.rejected){
+      clearInterval(__statusPoll); __statusPoll = null;
+      setSurveyState("rejected", st);
     } else if(st && st.admin_message){
       setSurveyState("pending", st);
     }
@@ -488,11 +497,18 @@ async function initSurveyFlow(){
   const st = await fetchStatus();
   if(st && st.approved){
     setSurveyState("approved", st);
+  } else if(st && st.rejected){
+    setSurveyState("rejected", st);
   } else if(st && st.registered){
     if(localStorage.getItem("cs3_submitted") === "1"){ setSurveyState("pending", st); startStatusPolling(); }
     else setSurveyState("form");
   } else {
     setSurveyState("gate");
+  }
+
+  const retryBtn = document.getElementById("retryBtn");
+  if(retryBtn){
+    retryBtn.addEventListener("click", ()=> setSurveyState("form"));
   }
 
   if(checkBtn){
