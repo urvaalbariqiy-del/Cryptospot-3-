@@ -398,3 +398,106 @@ footer.site-footer{border-top:1px solid var(--border);padding:52px 0 30px}
   display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border-radius:14px;
   background:rgba(230,72,79,.08);border:1px solid rgba(230,72,79,.35);font-size:14px;line-height:1.55;
 }
+
+/* ============================================================
+   PREMIUM LIGHT THEME — boyitilgan yorug' rejim
+   (faqat [data-theme="light"] — qorong'i rejimga tegmaydi)
+   ============================================================ */
+[data-theme="light"]{
+  --bg:#f6f5f1;
+  --bg-alt:#eeece4;
+  --card:#ffffff;
+  --fg:#14141a;
+  --muted:#5b5a63;
+  --border:#e8e4d8;
+  --gold:#a97b1e;      /* yorug'da o'qiladigan boy oltin */
+  --gold-2:#c99a34;
+  --shadow:0 1px 2px rgba(24,24,40,.05), 0 18px 40px -22px rgba(24,24,40,.20);
+}
+
+/* Umumiy fon — yassi emas, nozik oltin nur bilan chuqurlik */
+[data-theme="light"] body{
+  background:
+    radial-gradient(72% 42% at 50% -10%, rgba(201,154,52,.12), transparent 62%),
+    var(--bg);
+}
+
+/* Hero — boyroq, yorqin nur */
+[data-theme="light"] .hero{
+  background:
+    radial-gradient(56% 46% at 8% -8%, rgba(201,154,52,.22), transparent 60%),
+    radial-gradient(52% 52% at 95% -4%, rgba(58,140,214,.17), transparent 60%),
+    linear-gradient(180deg,#fffdf8,#f6f5f1);
+}
+
+/* Kartalar — aniq, qatlamli soya (premium chuqurlik) */
+[data-theme="light"] .card{
+  border-color:#ece9de;
+  box-shadow:0 1px 2px rgba(24,24,40,.04), 0 16px 34px -18px rgba(24,24,40,.16);
+}
+
+/* Eyebrow — kontrast oltin yorliq */
+[data-theme="light"] .eyebrow{
+  color:#946a17;
+  background:linear-gradient(90deg, rgba(201,154,52,.16), rgba(58,140,214,.10));
+  border-color:#eae2cf;
+}
+
+/* Gradient matn — yorug'da boy, o'qiladigan ranglar */
+[data-theme="light"] .grad-text{
+  background:linear-gradient(90deg,#c99a34,#a97b1e,#2f7fd6);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+/* Dark poster panellar yorug'da ham chiroyli — oltin aksentlar yorqin qolsin */
+[data-theme="light"] .poster-icon{border-color:rgba(232,184,75,.85)}
+[data-theme="light"] .poster-tagline{color:#f6d47a}
+
+/* CTA band — boy, yorqin gradient */
+[data-theme="light"] .cta-band{
+  background:
+    radial-gradient(85% 130% at 0% 0%, rgba(201,154,52,.17), transparent 55%),
+    radial-gradient(85% 130% at 100% 100%, rgba(58,140,214,.16), transparent 55%),
+    #ffffff;
+  border-color:#ece9de;
+  box-shadow:0 30px 70px -34px rgba(30,30,50,.22);
+}
+
+/* Pricing "featured" — oltin nur kuchliroq */
+[data-theme="light"] .price-card.featured{
+  box-shadow:0 0 0 1px var(--gold), 0 30px 70px -30px rgba(176,125,26,.30);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(201,154,52,.14), transparent 55%),
+    radial-gradient(90% 70% at 0% 100%, rgba(58,140,214,.08), transparent 55%),
+    #fffdf7;
+}
+[data-theme="light"] .price-tag{color:#2a1c04}
+
+/* Kirish maydonlari — toza, yumshoq fon */
+[data-theme="light"] .field input[type=text],
+[data-theme="light"] .field input[type=number],
+[data-theme="light"] .field select,
+[data-theme="light"] .field textarea{
+  background:#faf9f5;border-color:#e6e2d6;
+}
+
+/* Navbar — yorug'da scroll'da nozik soya */
+[data-theme="light"] .nav.scrolled{box-shadow:0 10px 34px -22px rgba(30,30,50,.28)}
+
+/* Ikon tugmalar — yorug'da nozik chegara */
+[data-theme="light"] .icon-btn:hover{background:#eceada}
+
+/* ============================================================
+   UMUMIY POLISH (ikkala rejimda ham)
+   ============================================================ */
+/* Forma maydonlari fokusda — nozik oltin halqa */
+.field input:focus,.field select:focus,.field textarea:focus{
+  outline:none;border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(232,184,75,.18);
+}
+
+/* Interaktiv kartalarda yumshoq ko'tarilish (premium his) */
+.feature-card,.price-card,.tcard,.step-card{
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.feature-card:hover,.tcard:hover,.step-card:hover{transform:translateY(-4px)}
