@@ -550,4 +550,5 @@ document.addEventListener("DOMContentLoaded", ()=>{
   document.querySelectorAll("[data-link=instagram]").forEach(a=> a.href = cfg.channels?.instagram || "#");
   document.querySelectorAll("[data-link=youtube]").forEach(a=> a.href = cfg.channels?.youtube || "#");
   document.querySelectorAll("[data-link=bot]").forEach(a=> a.href = `https://t.me/${cfg.telegramBotUsername || ""}`);
+  document.querySelectorAll("[data-link=manager]").forEach(a=> a.href = `https://t.me/${cfg.managerBotUsername || ""}`);
 });
