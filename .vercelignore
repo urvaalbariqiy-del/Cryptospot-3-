@@ -1,0 +1,5 @@
+# Backend (bot) — bu statik saytga kirmaydi, alohida Render'da ishlaydi
+backend/
+
+# Loyiha hujjatlari — saytda kerak emas
+PROJECT_OVERVIEW.md
