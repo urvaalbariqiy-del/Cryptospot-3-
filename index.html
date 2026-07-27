@@ -14,6 +14,148 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/main.css">
   <meta name="google-site-verification" content="6dXz70I07AuWuCMM8r_XZK_Budmu9JHM1w6QXV11bR0">
+<style>
+/* ============================================================
+   CS3% QO'SHIMCHA UslUBLAR: Chegirma taymeri + Fikrlar typewriter
+   ============================================================ */
+
+/* ---- Chegirma taymeri banneri ---- */
+.cs3-countdown-banner{
+  background: var(--bg-alt, #11161d);
+  border: 1px solid var(--border, #232a35);
+  border-left: 4px solid var(--gold, #D4A83C);
+  border-radius: 16px;
+  padding: 22px 24px;
+  margin: 0 0 32px;
+  text-align: center;
+}
+.cs3-countdown-top{
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  margin-bottom: 10px;
+}
+.cs3-countdown-fire{ font-size: 20px; animation: cs3-pulse 1.4s ease-in-out infinite; }
+@keyframes cs3-pulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.18); } }
+.cs3-countdown-title{
+  font-weight: 700;
+  font-size: clamp(16px,2.2vw,20px);
+  color: var(--gold, #D4A83C);
+  font-family:'Space Grotesk',sans-serif;
+}
+.cs3-countdown-text{
+  margin: 0 0 14px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  opacity: .85;
+  max-width: 560px;
+  margin-left:auto; margin-right:auto;
+}
+.cs3-countdown-offers{
+  display:flex; flex-direction:column; gap:8px;
+  max-width: 440px; margin: 0 auto 14px;
+}
+.cs3-offer-row{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14.5px;
+}
+.cs3-offer-label{
+  font-weight:700;
+  font-family:'Space Grotesk',sans-serif;
+  font-size:13.5px;
+  letter-spacing:.3px;
+}
+.cs3-offer-prices{ white-space:nowrap; }
+.cs3-offer-old{ text-decoration:line-through; opacity:.55; }
+.cs3-offer-new{ font-weight:800; font-size:16px; }
+.cs3-offer-vip{ background: rgba(56,189,248,0.10); border: 1px solid rgba(56,189,248,0.35); }
+.cs3-offer-vip .cs3-offer-label{ color:#38bdf8; }
+.cs3-offer-vip .cs3-offer-new{ color:#38bdf8; }
+.cs3-offer-premium{ background: rgba(212,168,60,0.10); border: 1px solid rgba(212,168,60,0.4); }
+.cs3-offer-premium .cs3-offer-label{ color: var(--gold, #D4A83C); }
+.cs3-offer-premium .cs3-offer-new{ color: var(--gold, #D4A83C); }
+.cs3-countdown-subtext{
+  margin: 0 0 16px;
+  font-size: 13.5px;
+  opacity:.75;
+  max-width: 500px;
+  margin-left:auto; margin-right:auto;
+}
+.cs3-countdown-clock{
+  display:flex; align-items:center; justify-content:center; gap:6px; flex-wrap:wrap;
+}
+.cs3-c-unit{
+  display:flex; flex-direction:column; align-items:center;
+  background: rgba(212,168,60,0.1);
+  border:1px solid var(--border, #232a35);
+  border-radius: 10px;
+  min-width:58px;
+  padding:8px 6px;
+}
+.cs3-c-num{
+  font-family:'Space Grotesk',monospace;
+  font-size: clamp(20px,3vw,26px);
+  font-weight:700;
+  color: var(--gold, #D4A83C);
+  line-height:1;
+}
+.cs3-c-lab{
+  font-size:10.5px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+  opacity:.65;
+  margin-top:4px;
+}
+.cs3-c-sep{ font-size:22px; font-weight:700; color: var(--gold, #D4A83C); opacity:.5; }
+.cs3-countdown-banner.cs3-expired .cs3-countdown-clock{ display:none; }
+.cs3-countdown-banner.cs3-expired .cs3-countdown-text::after{
+  content:' Chegirma muddati tugadi.';
+  font-weight:700;
+}
+
+/* ---- Har bir tarif kartasidagi chegirma yorlig'i ---- */
+.cs3-discount-tag{
+  background: rgba(34,197,94,0.08);
+  border: 1px dashed var(--gold, #D4A83C);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+  margin: 14px 0;
+}
+.cs3-discount-percent{
+  background: var(--gold, #D4A83C);
+  color:#1a1305;
+  font-weight:800;
+  font-size:13px;
+  padding:3px 9px;
+  border-radius:999px;
+  font-family:'Space Grotesk',sans-serif;
+}
+.cs3-discount-prices{ display:flex; align-items:baseline; gap:8px; }
+.cs3-discount-old{ text-decoration: line-through; opacity:.55; font-size:15px; }
+.cs3-discount-new{ font-weight:800; font-size:20px; color:#22c55e; font-family:'Space Grotesk',sans-serif; }
+.cs3-discount-note{ font-size:12.5px; opacity:.7; margin-left:auto; }
+@media (max-width:420px){ .cs3-discount-note{ margin-left:0; flex-basis:100%; } }
+
+/* ---- Fikrlar (testimonials) typewriter effekti ---- */
+#testimonials .tcard p[data-i18n]{
+  min-height:1.4em;
+}
+#testimonials .tcard p[data-i18n].cs3-typing::after{
+  content:'';
+  display:inline-block;
+  width:2px;
+  height:1em;
+  background:#22c55e;
+  margin-left:2px;
+  vertical-align:-0.15em;
+  animation:cs3-cursor-blink 0.8s steps(1) infinite;
+}
+@keyframes cs3-cursor-blink{ 50%{ opacity:0; } }
+@media (prefers-reduced-motion: reduce){
+  #testimonials .tcard p[data-i18n].cs3-typing::after{ display:none; }
+}
+</style>
 </head>
 <body>
   <div id="introOverlay" style="position:fixed;inset:0;z-index:99999;background:radial-gradient(ellipse at 50% 40%,#131f38 0%,#0a1120 65%,#070c17 100%);display:flex;align-items:center;justify-content:center;transition:opacity .7s ease;overflow:hidden;">
@@ -264,653 +406,4 @@
           <img src="assets/img/logo-mycommunity.png" alt="My Community">
           <div><h3 style="margin:0;font-size:16px" data-i18n="community.my_title">My Community</h3><span data-i18n="community.my_sub">148 a'zo · Umumiy jamoa</span></div>
         </div>
-        <div class="notice" style="margin-bottom:0">
-          🔒 <span data-i18n="community.my_note">My Community'ga to'g'ridan-to'g'ri qo'shilish mavjud emas — bu jamoa faqat CS3% Execution Lab dasturining <b>Premium tarifi</b> orqali ochiladi.</span>
-        </div>
-        <a href="#pricing" class="btn btn-outline" style="margin-top:16px" data-i18n="community.my_cta">Premium tarifni ko'rish</a>
-      </div>
-      <div class="channel-poster" style="margin:0">
-        <span class="poster-watermark">MY COMMUNITY</span>
-        <div class="poster-content">
-          <span class="poster-tagline" data-i18n="community.my_sub">148 a'zo · Umumiy jamoa</span>
-          <div class="poster-list">
-            <div class="poster-row"><div class="poster-icon">💬</div><div><b data-i18n="community.my1_t">CHAT</b><span class="desc" data-i18n="community.my1_d">Erkin muloqot maydoni.</span></div></div>
-            <div class="poster-row"><div class="poster-icon">🪙</div><div><b data-i18n="community.my2_t">BTC ETH SOL</b><span class="desc" data-i18n="community.my2_d">Asosiy kriptovalyutalar tahlili.</span></div></div>
-            <div class="poster-row"><div class="poster-icon">📊</div><div><b data-i18n="community.my3_t">ANALIZ</b><span class="desc" data-i18n="community.my3_d">Texnik va fundamental tahlillar.</span></div></div>
-            <div class="poster-row"><div class="poster-icon">🎯</div><div><b data-i18n="community.my4_t">JAMOA SIGNALLAR</b><span class="desc" data-i18n="community.my4_d">Jamoaviy savdo signallari.</span></div></div>
-            <div class="poster-row"><div class="poster-icon">🎁</div><div><b data-i18n="community.my5_t">AKSIYALAR</b><span class="desc" data-i18n="community.my5_d">Maxsus takliflar va bonuslar.</span></div></div>
-            <div class="poster-row"><div class="poster-icon">🎓</div><div><b data-i18n="community.my6_t">DARSLAR & STRATEGIYALAR</b><span class="desc" data-i18n="community.my6_d">Risk menejmenti va strategiyalar.</span></div></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- VIP 3% -->
-<section class="section" id="vip3" style="background:var(--bg-alt)">
-  <div class="container">
-    <div class="grid-2 reveal" style="align-items:center">
-      <div class="channel-poster" style="margin:0;order:2">
-        <span class="poster-watermark">VIP 3%</span>
-        <div class="poster-content">
-          <span class="poster-tagline" data-i18n="community.vip_sub">159 a'zo · Signal va strategiya kanali</span>
-          <div class="poster-list">
-            <div class="poster-row"><div class="poster-icon">📈</div><div><b data-i18n="community.vip1_t">SIGNAL</b><span class="desc" data-i18n="community.vip1_d">Aniq kirish nuqtasi va target darajalari.</span></div></div>
-            <div class="poster-row"><div class="poster-icon">⚡</div><div><b data-i18n="community.vip2_t">SCALP</b><span class="desc" data-i18n="community.vip2_d">Qisqa muddatli tezkor imkoniyatlar.</span></div></div>
-            <div class="poster-row"><div class="poster-icon">🧩</div><div><b data-i18n="community.vip3_t">STRATEGIYA</b><span class="desc" data-i18n="community.vip3_d">Sinovdan o'tgan strategiyalar.</span></div></div>
-            <div class="poster-row"><div class="poster-icon">💎</div><div><b data-i18n="community.vip4_t">DARSLIKLAR</b><span class="desc" data-i18n="community.vip4_d">Yangilanadigan video darslar.</span></div></div>
-          </div>
-        </div>
-      </div>
-      <div style="order:1">
-        <span class="eyebrow" data-i18n="community.vip_eyebrow">VIP kanal</span>
-        <h2 style="font-size:clamp(24px,3vw,36px);margin:16px 0 14px" data-i18n="community.vip_title">VIP 3%</h2>
-        <p class="muted" style="margin-bottom:20px" data-i18n="community.vip_desc">Savdo signallariga qurilgan yopiq kanal — aniq kirish nuqtalari va tezkor tahlillar shu yerda.</p>
-        <div style="display:flex;gap:12px;margin-bottom:22px">
-          <div class="card" style="padding:16px 18px;flex:1">
-            <div class="pill" style="margin-bottom:8px" data-i18n="community.vip_1m_label">1 oylik obuna</div>
-            <div style="font-size:24px;font-weight:700;font-family:'Space Grotesk',sans-serif">$10</div>
-          </div>
-          <div class="card" style="padding:16px 18px;flex:1;border-color:var(--gold)">
-            <div class="pill" style="margin-bottom:8px" data-i18n="community.vip_3m_label">3 oylik obuna</div>
-            <div style="font-size:24px;font-weight:700;font-family:'Space Grotesk',sans-serif">$25</div>
-          </div>
-        </div>
-        <div class="comm-head" style="padding:0;margin-bottom:22px">
-          <img src="assets/img/logo-vip3.png" alt="VIP 3%">
-          <div><h3 style="margin:0;font-size:16px" data-i18n="community.vip_title">VIP 3%</h3><span data-i18n="community.vip_sub">159 a'zo · Signal va strategiya kanali</span></div>
-        </div>
-        <a href="#" target="_blank" data-link="manager" class="btn btn-outline" data-i18n="community.vip_cta">VIP 3%ga qo'shilish</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-  <!-- ================= VIP 3% OYLIK NATIJALAR — shu blokni qo'shing ================= -->
-<section id="vip3-natijalar" style="padding:60px 20px;background:#0d1526;">
-  <style>
-    .vipres-wrap{max-width:1100px;margin:0 auto;}
-    .vipres-head{text-align:center;margin-bottom:36px;}
-    .vipres-eyebrow{color:#D4A83C;font-weight:700;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
-    .vipres-title{color:#fff;font-size:32px;font-weight:800;margin:0 0 10px;font-family:Arial,Helvetica,sans-serif;}
-    .vipres-sub{color:#9aa3b8;font-size:15px;max-width:560px;margin:0 auto;line-height:1.5;}
-    .vipres-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;}
-    .vipres-card{background:#131c30;border:1px solid #232f47;border-radius:16px;overflow:hidden;transition:transform .2s;}
-    .vipres-card:hover{transform:translateY(-4px);}
-    .vipres-card-head{background:linear-gradient(135deg,#D4A83C,#a97f1f);color:#0d1526;text-align:center;font-weight:800;font-size:16px;padding:14px 10px;font-family:Arial,Helvetica,sans-serif;}
-    .vipres-row{display:flex;justify-content:space-between;align-items:center;padding:9px 16px;font-size:13.5px;font-family:Arial,Helvetica,sans-serif;border-bottom:1px solid #1c2740;}
-    .vipres-row:last-child{border-bottom:none;}
-    .vipres-label{color:#aeb6c9;}
-    .vipres-val{font-weight:700;}
-    .vipres-yellow{background:#3a3312;}
-    .vipres-yellow .vipres-val{color:#f2d060;}
-    .vipres-green{background:#122b1a;}
-    .vipres-green .vipres-val{color:#4ade80;}
-    .vipres-red{background:#331515;}
-    .vipres-red .vipres-val{color:#f87171;}
-    .vipres-blue{background:#132436;}
-    .vipres-blue .vipres-val{color:#60a5fa;}
-    .vipres-purple{background:#241a36;}
-    .vipres-purple .vipres-val{color:#c084fc;}
-    .vipres-total{background:#163a24 !important;padding:14px 16px;}
-    .vipres-total .vipres-label{color:#e5e9f2;font-weight:700;font-size:14px;}
-    .vipres-total .vipres-val{color:#4ade80;font-size:17px;}
-  </style>
-
-  <div class="vipres-wrap">
-    <div class="vipres-head">
-      <div class="vipres-eyebrow">VIP 3% · Real natijalar</div>
-      <h2 class="vipres-title">Oylik signal statistikasi</h2>
-      <p class="vipres-sub">Har oy yakunida VIP 3% kanalidagi barcha signallar ochiq statistika sifatida e'lon qilinadi — hech narsa yashirilmaydi.</p>
-    </div>
-
-    <div class="vipres-grid">
-
-      <!-- APREL 2026 -->
-      <div class="vipres-card">
-        <div class="vipres-card-head">VIP 3% — Aprel 2026</div>
-        <div class="vipres-row vipres-yellow"><span class="vipres-label">Jami signallar</span><span class="vipres-val">170</span></div>
-        <div class="vipres-row vipres-green"><span class="vipres-label">Profit soni</span><span class="vipres-val">97</span></div>
-        <div class="vipres-row vipres-green"><span class="vipres-label">Profit foizi</span><span class="vipres-val">1290,4%</span></div>
-        <div class="vipres-row vipres-red"><span class="vipres-label">Loss soni</span><span class="vipres-val">44</span></div>
-        <div class="vipres-row vipres-red"><span class="vipres-label">Loss foizi</span><span class="vipres-val">141,6%</span></div>
-        <div class="vipres-row vipres-blue"><span class="vipres-label">Active</span><span class="vipres-val">11</span></div>
-        <div class="vipres-row vipres-purple"><span class="vipres-label">Otmen</span><span class="vipres-val">18</span></div>
-        <div class="vipres-row vipres-total"><span class="vipres-label">Sof foyda</span><span class="vipres-val">1148,8%</span></div>
-      </div>
-
-      <!-- MAY 2026 -->
-      <div class="vipres-card">
-        <div class="vipres-card-head">VIP 3% — May 2026</div>
-        <div class="vipres-row vipres-yellow"><span class="vipres-label">Jami signallar</span><span class="vipres-val">88</span></div>
-        <div class="vipres-row vipres-yellow"><span class="vipres-label">Swing soni</span><span class="vipres-val">13</span></div>
-        <div class="vipres-row vipres-yellow"><span class="vipres-label">Scalp soni</span><span class="vipres-val">14</span></div>
-        <div class="vipres-row vipres-green"><span class="vipres-label">Profit soni</span><span class="vipres-val">35</span></div>
-        <div class="vipres-row vipres-green"><span class="vipres-label">Profit foizi</span><span class="vipres-val">509,9%</span></div>
-        <div class="vipres-row vipres-red"><span class="vipres-label">Loss soni</span><span class="vipres-val">23</span></div>
-        <div class="vipres-row vipres-red"><span class="vipres-label">Loss foizi</span><span class="vipres-val">78,0%</span></div>
-        <div class="vipres-row vipres-blue"><span class="vipres-label">Active</span><span class="vipres-val">10</span></div>
-        <div class="vipres-row vipres-purple"><span class="vipres-label">Otmen</span><span class="vipres-val">20</span></div>
-        <div class="vipres-row vipres-total"><span class="vipres-label">Sof foyda</span><span class="vipres-val">431,9%</span></div>
-      </div>
-
-      <!-- IYUN 2026 -->
-      <div class="vipres-card">
-        <div class="vipres-card-head">VIP 3% — Iyun 2026</div>
-        <div class="vipres-row vipres-yellow"><span class="vipres-label">Jami signallar</span><span class="vipres-val">137</span></div>
-        <div class="vipres-row vipres-yellow"><span class="vipres-label">Swing soni</span><span class="vipres-val">51</span></div>
-        <div class="vipres-row vipres-yellow"><span class="vipres-label">Scalp soni</span><span class="vipres-val">86</span></div>
-        <div class="vipres-row vipres-green"><span class="vipres-label">Profit soni</span><span class="vipres-val">49</span></div>
-        <div class="vipres-row vipres-green"><span class="vipres-label">Profit foizi</span><span class="vipres-val">725,9%</span></div>
-        <div class="vipres-row vipres-red"><span class="vipres-label">Loss soni</span><span class="vipres-val">28</span></div>
-        <div class="vipres-row vipres-red"><span class="vipres-label">Loss foizi</span><span class="vipres-val">58,8%</span></div>
-        <div class="vipres-row vipres-blue"><span class="vipres-label">Active</span><span class="vipres-val">51</span></div>
-        <div class="vipres-row vipres-purple"><span class="vipres-label">Otmen</span><span class="vipres-val">9</span></div>
-        <div class="vipres-row vipres-total"><span class="vipres-label">Sof foyda</span><span class="vipres-val">667,1%</span></div>
-      </div>
-
-      <!-- IYUL 2026 -->
-      <div class="vipres-card">
-        <div class="vipres-card-head">VIP 3% — Iyul 2026</div>
-        <div class="vipres-row vipres-yellow"><span class="vipres-label">Jami signallar</span><span class="vipres-val">61</span></div>
-        <div class="vipres-row vipres-yellow"><span class="vipres-label">Swing soni</span><span class="vipres-val">45</span></div>
-        <div class="vipres-row vipres-yellow"><span class="vipres-label">Scalp soni</span><span class="vipres-val">16</span></div>
-        <div class="vipres-row vipres-green"><span class="vipres-label">Profit soni</span><span class="vipres-val">32</span></div>
-        <div class="vipres-row vipres-green"><span class="vipres-label">Profit foizi</span><span class="vipres-val">351,2%</span></div>
-        <div class="vipres-row vipres-red"><span class="vipres-label">Loss soni</span><span class="vipres-val">15</span></div>
-        <div class="vipres-row vipres-red"><span class="vipres-label">Loss foizi</span><span class="vipres-val">58,3%</span></div>
-        <div class="vipres-row vipres-blue"><span class="vipres-label">Active</span><span class="vipres-val">11</span></div>
-        <div class="vipres-row vipres-purple"><span class="vipres-label">Otmen</span><span class="vipres-val">3</span></div>
-        <div class="vipres-row vipres-total"><span class="vipres-label">Sof foyda</span><span class="vipres-val">292,9%</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- ================= VIP 3% OYLIK NATIJALAR — blok shu yerda tugaydi ================= -->
-  
-<!-- TESTIMONIALS -->
-<section class="section" id="testimonials">
-  <div class="container">
-    <div class="section-head center reveal">
-      <span class="eyebrow" data-i18n="testimonials.eyebrow">Fikrlar</span>
-      <h2 data-i18n="testimonials.title">Shogirdlarning real fikrlari</h2>
-      <p data-i18n="testimonials.lead">Jamoamiz a'zolarining o'z so'zlari bilan yozgan mulohazalari.</p>
-    </div>
-    <div class="tgrid reveal">
-      <div class="card tcard"><p data-i18n="testimonials.t1"></p><footer><div class="tavatar">S</div><div><div class="tname">Sardor A.</div><div class="trole">@sardor_trades</div></div></footer></div>
-      <div class="card tcard"><p data-i18n="testimonials.t2"></p><footer><div class="tavatar">J</div><div><div class="tname">Jasurbek</div><div class="trole">@jasurbek_98</div></div></footer></div>
-      <div class="card tcard"><p data-i18n="testimonials.t3"></p><footer><div class="tavatar">O</div><div><div class="tname">Otabek M.</div><div class="trole">@otabek_m</div></div></footer></div>
-      <div class="card tcard"><p data-i18n="testimonials.t4"></p><footer><div class="tavatar">B</div><div><div class="tname">Bekzod T.</div><div class="trole">@bekzod_trader</div></div></footer></div>
-      <div class="card tcard"><p data-i18n="testimonials.t5"></p><footer><div class="tavatar">Sh</div><div><div class="tname">Shohruxbek</div><div class="trole">@shohruxbek_fx</div></div></footer></div>
-      <div class="card tcard"><p data-i18n="testimonials.t6"></p><footer><div class="tavatar">I</div><div><div class="tname">Islombek R.</div><div class="trole">@i.rustamov</div></div></footer></div>
-    </div>
-  </div>
-</section>
-
-  <!DOCTYPE html>
-<html lang="uz">
-<head>
-<meta charset="UTF-8">
-<title>CS3% - Candlestick Animation</title>
-<style>
-  /* Demo sahifa uchun fon - haqiqiy saytda buni o'chiring, chunki animatsiya
-     shaffof fonda ishlaydi va sizning sahifangiz foniga o'zi qo'shilib ketadi */
-  body{
-    margin:0;
-    background:#0a0f14;
-    font-family: -apple-system, Segoe UI, Roboto, sans-serif;
-  }
-</style>
-</head>
-<body>
-
-<!-- ================================================================
-     KO'CHIRIB OLINADIGAN QISM boshlanadi
-     Shu <div class="cs3-chart-wrap">...</div> blokini butunligicha
-     saytingizning "Loyiha haqide" bo'limi ustiga joylashtiring.
-     ================================================================ -->
-<div class="cs3-chart-wrap">
-  <canvas id="cs3Chart"></canvas>
-</div>
-
-<style>
-.cs3-chart-wrap{
-  position:relative;
-  width:100%;
-  height:340px;
-  overflow:hidden;
-  background:transparent; /* saytning o'z foniga qo'shilib ketadi, alohida ramka yo'q */
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
-}
-#cs3Chart{
-  display:block;
-  width:100%;
-  height:100%;
-}
-@media (max-width: 640px){
-  .cs3-chart-wrap{ height:220px; }
-}
-@media (prefers-reduced-motion: reduce){
-  .cs3-chart-wrap canvas{ animation:none !important; }
-}
-</style>
-
-<script>
-(function(){
-  const canvas = document.getElementById('cs3Chart');
-  const ctx = canvas.getContext('2d');
-  let W, H, DPR;
-
-  function resize(){
-    DPR = window.devicePixelRatio || 1;
-    W = canvas.clientWidth;
-    H = canvas.clientHeight;
-    canvas.width = W * DPR;
-    canvas.height = H * DPR;
-    ctx.setTransform(DPR,0,0,DPR,0,0);
-  }
-  window.addEventListener('resize', resize);
-
-  // --- Ranglar (sayt sxemasiga moslash uchun shu yerni o'zgartiring) ---
-  const COLOR_UP     = '#22c55e';   // yashil sham
-  const COLOR_UP_WICK= 'rgba(34,197,94,0.9)';
-  const COLOR_DOWN   = '#ef4444';   // qisqa pastga tortilish uchun qizil (kam-kam)
-  const COLOR_DOWN_WICK = 'rgba(239,68,68,0.9)';
-  const COLOR_MA1    = 'rgba(56,189,248,0.85)';  // ko'k indikator chizig'i
-  const COLOR_MA2    = 'rgba(250,204,21,0.75)';  // sariq indikator chizig'i
-
-  const CANDLE_W = 34;      // sham kengligi
-  const GAP = 18;           // shamlar orasidagi masofa
-  const SPEED = 0.6;        // px/frame - siljish tezligi
-
-  // --- Narx generatori: cheksiz, tasodifiy lekin umumiy trend yuqoriga ---
-  let price = 100;
-  let candles = [];
-  let scrollX = 0;
-
-  function nextCandle(){
-    const open = price;
-    // umumiy trend yuqoriga, vaqti-vaqti bilan kichik pastga tortilish
-    const bias = Math.random() < 0.78 ? 1 : -1;
-    const move = (Math.random() * 3 + 0.5) * bias;
-    let close = open + move;
-    const high = Math.max(open, close) + Math.random() * 1.5;
-    const low  = Math.min(open, close) - Math.random() * 1.2;
-    price = close;
-    // narx juda pasayib ketmasligi uchun asta sozlash
-    if (price < 60) price += 8;
-    if (price > 220) price -= 6;
-    return { open, close, high, low, up: close >= open };
-  }
-
-  function seed(count){
-    for(let i=0;i<count;i++) candles.push(nextCandle());
-  }
-
-  // --- Indikator (harakatlanuvchi o'rtacha) hisoblash ---
-  function movingAverage(arr, period){
-    const res = [];
-    for(let i=0;i<arr.length;i++){
-      const start = Math.max(0, i-period+1);
-      const slice = arr.slice(start, i+1);
-      const avg = slice.reduce((s,c)=>s+c.close,0)/slice.length;
-      res.push(avg);
-    }
-    return res;
-  }
-
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-
-    const totalW = candles.length * (CANDLE_W+GAP);
-    // narxlar diapazonini topib, canvasga moslashtirish
-    const visibleFrom = Math.max(0, Math.floor(scrollX/(CANDLE_W+GAP)) - 1);
-    const visibleTo = Math.min(candles.length, visibleFrom + Math.ceil(W/(CANDLE_W+GAP)) + 3);
-    const visible = candles.slice(visibleFrom, visibleTo);
-
-    let lo = Infinity, hi = -Infinity;
-    visible.forEach(c=>{ lo=Math.min(lo,c.low); hi=Math.max(hi,c.high); });
-    if (!isFinite(lo)) { lo = 0; hi = 1; }
-    const pad = (hi-lo)*0.15 || 1;
-    lo -= pad; hi += pad;
-
-    function yFor(val){
-      return H - ((val-lo)/(hi-lo)) * (H*0.82) - H*0.06;
-    }
-
-    // shamlarni chizish
-    for(let i=visibleFrom;i<visibleTo;i++){
-      const c = candles[i];
-      const x = i*(CANDLE_W+GAP) - scrollX;
-      if (x < -CANDLE_W || x > W+CANDLE_W) continue;
-
-      const yOpen = yFor(c.open);
-      const yClose = yFor(c.close);
-      const yHigh = yFor(c.high);
-      const yLow = yFor(c.low);
-      const bodyTop = Math.min(yOpen,yClose);
-      const bodyH = Math.max(2, Math.abs(yClose-yOpen));
-
-      ctx.strokeStyle = c.up ? COLOR_UP_WICK : COLOR_DOWN_WICK;
-      ctx.lineWidth = 2.6;
-      ctx.beginPath();
-      ctx.moveTo(x+CANDLE_W/2, yHigh);
-      ctx.lineTo(x+CANDLE_W/2, yLow);
-      ctx.stroke();
-
-      ctx.fillStyle = c.up ? COLOR_UP : COLOR_DOWN;
-      ctx.fillRect(x, bodyTop, CANDLE_W, bodyH);
-    }
-
-    // indikator chiziqlarini chizish (2 xil moving average)
-    const ma1 = movingAverage(candles, 5);
-    const ma2 = movingAverage(candles, 12);
-
-    function drawLine(data, color){
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 1.6;
-      ctx.beginPath();
-      let started = false;
-      for(let i=visibleFrom;i<visibleTo;i++){
-        const x = i*(CANDLE_W+GAP) - scrollX + CANDLE_W/2;
-        if (x < -20 || x > W+20) continue;
-        const y = yFor(data[i]);
-        if(!started){ ctx.moveTo(x,y); started = true; }
-        else ctx.lineTo(x,y);
-      }
-      ctx.stroke();
-    }
-    drawLine(ma1, COLOR_MA1);
-    drawLine(ma2, COLOR_MA2);
-
-    // scroll pozitsiyasini oshirish - cheksiz siljish
-    scrollX += SPEED;
-
-    // scroll juda uzoqqa ketsa, boshini "unutib", massivni siljitib
-    // shu tariqa xotira cheksiz o'smaydi va animatsiya hech qachon
-    // "qaytadan boshlanmaydi" - doim yangi shamlar generatsiya bo'lib boradi
-    const candleStep = CANDLE_W+GAP;
-    if (scrollX > candleStep * 40){
-      const shift = 20;
-      candles.splice(0, shift);
-      scrollX -= shift*candleStep;
-    }
-    // oxiriga yetganda yangi shamlar qo'shib boramiz (cheksiz generatsiya)
-    while (candles.length < Math.ceil(W/(CANDLE_W+GAP)) + 60){
-      candles.push(nextCandle());
-    }
-
-    requestAnimationFrame(draw);
-  }
-
-  resize();
-  seed(Math.ceil(window.innerWidth/(CANDLE_W+GAP)) + 80);
-  requestAnimationFrame(draw);
-})();
-</script>
-<!-- ================================================================
-     KO'CHIRIB OLINADIGAN QISM tugaydi
-     ================================================================ -->
-
-</body>
-</html>
-  
-
-<!-- PROBLEM / FEATURES -->
-<section class="section" style="background:var(--bg-alt)">
-  <div class="container">
-    <div class="grid-2 reveal" style="align-items:center;gap:44px;margin-bottom:52px">
-      <div class="center">
-        <img src="assets/img/logo-cs3.png" alt="CS3% Execution Lab" style="max-width:360px;width:100%;margin:0 auto;filter:drop-shadow(0 18px 44px rgba(58,160,255,.28))">
-      </div>
-      <div>
-        <span class="eyebrow" data-i18n="about2.eyebrow">Loyiha haqida</span>
-        <h2 style="font-size:clamp(24px,3.2vw,38px);margin:16px 0 16px" data-i18n="about2.title">CS3% Execution Lab — bajarish laboratoriyasi</h2>
-        <p class="muted" style="font-size:16px;line-height:1.75" data-i18n="about2.text">Bu shunchaki navbatdagi kurs emas. CS3% Execution Lab — 4 yillik real tajriba asosida qurilgan 2 oylik amaliy dastur bo'lib, sizni bozor tahlilini emas, balki psixologiya, temir intizom va o'z vaqtida aniq qaror qabul qilish — ya'ni Execution mahoratiga o'rgatadi. Faqat SPOT yo'nalishida, jonli sessiyalar va real amaliyot bilan savdolaringizni to'liq nazorat ostiga olasiz.</p>
-      </div>
-    </div>
-    <div class="grid-3 reveal">
-      <div class="card feature-card">
-        <div class="feature-icon">🧠</div>
-        <h3 data-i18n="problem.f1_title">Psixologiyani jilovlash</h3>
-        <p data-i18n="problem.f1_text">Hissiyotlarni boshqarib, sovuqqon qaror qabul qilishni o'rganasiz.</p>
-      </div>
-      <div class="card feature-card">
-        <div class="feature-icon">⚡</div>
-        <h3 data-i18n="problem.f2_title">Mukammal Execution</h3>
-        <p data-i18n="problem.f2_text">Tahlilni o'z vaqtida, qo'rqmasdan foydali bitimga aylantirasiz.</p>
-      </div>
-      <div class="card feature-card">
-        <div class="feature-icon">🛡️</div>
-        <h3 data-i18n="problem.f3_title">Temir intizom</h3>
-        <p data-i18n="problem.f3_text">Risk menejmenti qoidalaridan chekinmaslikni mashq qilasiz.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROGRAM -->
-<section class="section" id="program">
-  <div class="container">
-    <div class="section-head reveal">
-      <span class="eyebrow" data-i18n="program.eyebrow">CS3% Execution Lab</span>
-      <h2 data-i18n="program.title">2 oylik dastur ichida nima bor?</h2>
-      <p data-i18n="program.lead">Bu shunchaki navbatdagi nazariy kurs emas — real bozorda xatosiz savdo qilish uchun maxsus laboratoriya.</p>
-    </div>
-    <div class="steps reveal">
-      <div class="card step-card">
-        <div class="step-num">01</div>
-        <div><h3 style="margin:0 0 6px;font-size:16px" data-i18n="program.s1_title">20 ga yaqin amaliy online darslar</h3>
-        <p class="muted" style="margin:0;font-size:14px" data-i18n="program.s1_text">Barcha darslarning yozuvlari guruhda doimiy saqlanadi.</p></div>
-      </div>
-      <div class="card step-card">
-        <div class="step-num">02</div>
-        <div><h3 style="margin:0 0 6px;font-size:16px" data-i18n="program.s2_title">30 ga yaqin LIVE sessiyalar</h3>
-        <p class="muted" style="margin:0;font-size:14px" data-i18n="program.s2_text">Abdulloh bilan to'g'ridan-to'g'ri muloqot va real vaqt tahlili.</p></div>
-      </div>
-      <div class="card step-card">
-        <div class="step-num">03</div>
-        <div><h3 style="margin:0 0 6px;font-size:16px" data-i18n="program.s3_title">3 oylik VIP 3% obunasi — BONUS</h3>
-        <p class="muted" style="margin:0;font-size:14px" data-i18n="program.s3_text">Signal va tahlil kanaliga bepul kirish dastur davomida qo'shiladi.</p></div>
-      </div>
-      <div class="card step-card">
-        <div class="step-num">04</div>
-        <div><h3 style="margin:0 0 6px;font-size:16px" data-i18n="program.s4_title">MY COMMUNITY jamoasi</h3>
-        <p class="muted" style="margin:0;font-size:14px" data-i18n="program.s4_text">148+ a'zoli faol jamoa bilan doimiy muloqot va tajriba almashish.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section class="section" id="pricing">
-  <div class="container">
-    <div class="section-head center reveal">
-      <span class="eyebrow" data-i18n="pricing.eyebrow">Tariflar</span>
-      <h2 data-i18n="pricing.title">CS3% Execution Lab tariflari</h2>
-      <p data-i18n="pricing.lead">O'zingizga mos tarifni tanlang va dasturga qo'shiling.</p>
-    </div>
-    <div class="pricing-grid reveal">
-      <div class="card price-card">
-        <div class="pill" data-i18n="pricing.vip_desc">2 oylik to'liq dastur</div>
-        <h3 style="margin:16px 0 4px;font-size:20px" data-i18n="pricing.vip_name">VIP TARIF</h3>
-        <div style="margin:14px 0 4px"><span class="price-new">$119</span></div>
-        <ul class="price-list">
-          <li><span class="check">✓</span><b data-i18n="pricing.vip1">20 ga yaqin amaliy online darslar</b></li>
-          <li><span class="check">✓</span><b data-i18n="pricing.vip2">Barcha darslar yozuvi guruhda saqlanadi</b></li>
-          <li><span class="check">✓</span><b data-i18n="pricing.vip3">30 ga yaqin LIVE sessiyalar</b></li>
-          <li><span class="check">✓</span><b data-i18n="pricing.vip4">LIVE sessiyalarda to'g'ridan-to'g'ri muloqot</b></li>
-          <li><span class="check">✓</span><b data-i18n="pricing.vip5">3 oylik VIP 3% obunasi — BONUS</b></li>
-          <li><span class="check">✓</span><b data-i18n="pricing.vip6">Dastur davomiyligi: 2 oy</b></li>
-        </ul>
-        <a href="#survey" class="btn btn-outline btn-block tariff-btn" data-tariff="vip" data-i18n="pricing.vip_cta">VIP tarifni tanlash</a>
-      </div>
-      <div class="card price-card featured">
-        <div class="price-tag" data-i18n="pricing.prem_badge">Tavsiya etiladi</div>
-        <div class="pill" data-i18n="pricing.prem_desc">VIP tarifdagi barcha imkoniyatlar +</div>
-        <h3 style="margin:16px 0 4px;font-size:20px" data-i18n="pricing.prem_name">PREMIUM TARIF</h3>
-        <div style="margin:14px 0 4px"><span class="price-new">$249</span></div>
-        <ul class="price-list">
-          <li><span class="check">✓</span><b data-i18n="pricing.prem1">MY COMMUNITY ga muddatsiz kirish</b></li>
-          <li><span class="check">✓</span><b data-i18n="pricing.prem2">Abdulloh bilan doimiy aloqa va muloqot</b></li>
-          <li><span class="check">✓</span><b data-i18n="pricing.prem3">Shaxsan foydalanadigan CS3% indikatoriga dostup</b></li>
-          <li><span class="check">✓</span><b data-i18n="pricing.prem4">Bir martalik to'lov — muddatsiz community</b></li>
-        </ul>
-        <a href="#survey" class="btn btn-primary btn-block tariff-btn" data-tariff="premium" data-i18n="pricing.prem_cta">Premium tarifni tanlash</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SURVEY -->
-<section class="section" id="survey" style="background:var(--bg-alt)">
-  <div class="container">
-    <div class="survey-wrap">
-      <div class="reveal">
-        <span class="eyebrow" data-i18n="survey.eyebrow">Anketa</span>
-        <h2 style="font-size:clamp(24px,3vw,34px);margin:16px 0 14px" data-i18n="survey.title">Dasturga qo'shilish uchun anketani to'ldiring</h2>
-        <p class="muted" style="margin-bottom:20px" data-i18n="survey.lead">Anketani to'ldirish majburiy.</p>
-        <div class="notice">⚠️ <span data-i18n="footer.reminder">Eslatma: faqat SPOT yo'nalishida. Qolgan barcha yo'nalishlar shariatga ko'ra harom hisoblanadi.</span></div>
-        <p class="form-status" id="tariffNote"></p>
-      </div>
-      <div class="card reveal" id="surveyFormWrap" style="display:none;padding:0">
-      <div id="surveyGate" class="form-card" style="display:block">
-        <p style="margin:0 0 16px;font-size:14.5px;line-height:1.6" data-i18n="survey.gate_text">Anketani to'ldirish uchun avval botda ro'yxatdan o'ting: pastdagi tugma orqali botni oching va <b>Start</b> bosing, so'ng "Tekshirish" tugmasini bosing.</p>
-        <a href="#" target="_blank" id="startBotBtn" class="btn btn-primary btn-block" style="margin-bottom:12px" data-i18n="survey.start_bot">Botda ro'yxatdan o'tish</a>
-        <button type="button" id="checkRegBtn" class="btn btn-outline btn-block" data-i18n="survey.check_reg">Tekshirish</button>
-        <p class="form-status" id="gateStatus"></p>
-      </div>
-      <form id="surveyForm" style="padding:32px;display:none">
-        <div class="field">
-          <label data-i18n="survey.name_label">Ismingiz</label>
-          <input type="text" name="name" required>
-        </div>
-        <div class="field">
-          <label data-i18n="survey.age_label">Yoshingiz</label>
-          <input type="number" name="age" min="14" max="100" required>
-        </div>
-        <div class="field">
-          <label data-i18n="survey.years_label">Necha yildan beri treyderlik bilan shug'ullanasiz?</label>
-          <input type="text" name="years" required>
-        </div>
-        <div class="field">
-          <label data-i18n="survey.balance_label">Hozirdagi balansingiz qancha?</label>
-          <select name="balance" id="survey-balance" required>
-            <option value="$1,000 gacha">$1,000 gacha</option>
-            <option value="$1,000 – $5,000">$1,000 – $5,000</option>
-            <option value="$5,000 – $10,000">$5,000 – $10,000</option>
-            <option value="$10,000 dan yuqori">$10,000 dan yuqori</option>
-          </select>
-        </div>
-        <div class="field">
-          <label data-i18n="survey.loss_label">Qancha ziyon ko'rgansiz? (taxminan, $ da)</label>
-          <input type="text" name="loss" required>
-        </div>
-        <div class="field">
-          <label data-i18n="survey.cause_label">Trader sohasidagi xatolarning asl sababi nima deb bilasiz?</label>
-          <textarea name="cause" rows="3" data-i18n-ph="survey.cause_ph" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block" data-i18n="survey.submit">Anketani yuborish</button>
-        <p class="form-note" data-i18n="survey.note">Ma'lumotlaringiz to'g'ridan-to'g'ri Telegram orqali adminga yuboriladi.</p>
-        <p class="form-status" id="surveyStatus"></p>
-        <a href="#" data-link="bot" target="_blank" id="surveyFallback" class="btn btn-outline btn-block" style="display:none;margin-top:10px" data-i18n="survey.fallback">Botga qo'lda yozish</a>
-      </form>
-
-      <!-- Kutish: anketa yuborildi, admin ko'rib chiqmoqda -->
-      <div id="surveyPending" class="form-card" style="display:none;text-align:center">
-        <div style="font-size:42px;margin-bottom:12px">⏳</div>
-        <p style="font-size:16px;font-weight:700;margin:0 0 6px" data-i18n="survey.pending_title">Anketangiz yuborildi!</p>
-        <p class="muted" style="font-size:14px;line-height:1.6;margin:0" data-i18n="survey.pending_text">Admin ko'rib chiqmoqda. Tasdiqlangach, shu yerda tarif tanlash ochiladi.</p>
-        <p class="form-status" id="pendingAdminMsg" style="margin-top:14px"></p>
-      </div>
-
-      <!-- Tasdiqlangan: tarif tanlash -->
-      <div id="surveyApproved" class="form-card" style="display:none;text-align:center">
-        <div style="font-size:42px;margin-bottom:12px">✅</div>
-        <p style="font-size:17px;font-weight:700;margin:0 0 6px" data-i18n="survey.approved_title">Tasdiqlandingiz! 🎉</p>
-        <p class="muted" style="font-size:14px;line-height:1.6;margin:0 0 20px" data-i18n="survey.approved_text">Endi o'zingizga mos tarifni tanlang — to'lov manejer bot orqali.</p>
-        <p class="form-status" id="approvedAdminMsg" style="margin-bottom:16px"></p>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <a href="#" data-link="manager" target="_blank" class="btn btn-outline btn-block"><b>VIP TARIF</b> — $119</a>
-          <a href="#" data-link="manager" target="_blank" class="btn btn-primary btn-block"><b>PREMIUM TARIF</b> — $249</a>
-        </div>
-      </div>
-
-      <!-- Rad etilgan -->
-      <div id="surveyRejected" class="form-card" style="display:none;text-align:center">
-        <div style="font-size:42px;margin-bottom:12px">❌</div>
-        <p style="font-size:17px;font-weight:700;margin:0 0 6px" data-i18n="survey.rejected_title">Anketa tasdiqlanmadi</p>
-        <p class="muted" style="font-size:14px;line-height:1.6;margin:0 0 20px" data-i18n="survey.rejected_text">Afsuski, hozircha tasdiqlanmadingiz. Anketani qayta yuborishingiz mumkin.</p>
-        <p class="form-status" id="rejectedAdminMsg" style="margin-bottom:16px"></p>
-        <button type="button" id="retryBtn" class="btn btn-outline btn-block" data-i18n="survey.retry">Anketani qayta yuborish</button>
-      </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="section" id="faq">
-  <div class="container" style="max-width:820px">
-    <div class="section-head center reveal">
-      <span class="eyebrow" data-i18n="faq.eyebrow">Savollar</span>
-      <h2 data-i18n="faq.title">Ko'p beriladigan savollar</h2>
-    </div>
-    <div class="reveal">
-      <details class="faq-item"><summary data-i18n="faq.q1">Tajribam yo'q, dasturga qo'shila olamanmi?</summary><p data-i18n="faq.a1"></p></details>
-      <details class="faq-item"><summary data-i18n="faq.q2">Faqat SPOT yo'nalishida ishlaysizmi?</summary><p data-i18n="faq.a2"></p></details>
-      <details class="faq-item"><summary data-i18n="faq.q3">LIVE sessiyalar qanday o'tadi?</summary><p data-i18n="faq.a3"></p></details>
-      <details class="faq-item"><summary data-i18n="faq.q4">To'lovdan keyin nima bo'ladi?</summary><p data-i18n="faq.a4"></p></details>
-      <details class="faq-item"><summary data-i18n="faq.q5">Premium tarif nima bilan farq qiladi?</summary><p data-i18n="faq.a5"></p></details>
-    </div>
-  </div>
-</section>
-
-<!-- FINAL CTA -->
-<section class="section">
-  <div class="container">
-    <div class="cta-band reveal">
-      <h2 data-i18n="cta.title">Tasodifiy savdolardan charchadingizmi?</h2>
-      <p class="muted" style="max-width:520px;margin:0 auto 26px" data-i18n="cta.sub">CS3% Execution Lab bilan o'z savdolaringizni nazorat ostiga oling.</p>
-      <a href="#survey" class="btn btn-primary" data-i18n="cta.button">Hozir anketani to'ldirish</a>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="container">
-    <div class="foot-top">
-      <div class="foot-brand">
-        <div class="nav-logo"><img src="assets/img/logo-cs3.png" alt="CS3% Execution Lab"><span>CS3% Execution Lab</span></div>
-        <p data-i18n="footer.tagline">Real bozorda xatosiz savdo qilish uchun maxsus laboratoriya.</p>
-        <div class="foot-social">
-          <a href="#" target="_blank" data-link="telegram" class="icon-btn" aria-label="Telegram"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M9.04 15.47l-.38 5.34c.54 0 .78-.23 1.06-.51l2.55-2.44 5.29 3.87c.97.54 1.66.26 1.92-.9l3.48-16.3c.31-1.45-.52-2.02-1.47-1.67L1.16 9.5c-1.41.55-1.39 1.34-.24 1.69l5.28 1.64L18.4 5.28c.58-.38 1.11-.17.67.21z"/></svg></a>
-          <a href="#" target="_blank" data-link="instagram" class="icon-btn" aria-label="Instagram"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
-          <a href="#" target="_blank" data-link="youtube" class="icon-btn" aria-label="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M23 7.5a3 3 0 0 0-2.11-2.12C19.02 5 12 5 12 5s-7.02 0-8.89.38A3 3 0 0 0 1 7.5 31.3 31.3 0 0 0 .62 12 31.3 31.3 0 0 0 1 16.5a3 3 0 0 0 2.11 2.12C4.98 19 12 19 12 19s7.02 0 8.89-.38A3 3 0 0 0 23 16.5 31.3 31.3 0 0 0 23.38 12 31.3 31.3 0 0 0 23 7.5zM9.75 15.5v-7l6 3.5z"/></svg></a>
-        </div>
-      </div>
-      <div>
-        <div class="pill" style="margin-bottom:14px" data-i18n="footer.nav_title">Sahifa</div>
-        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px" class="muted">
-          <a href="#channel" data-i18n="nav.channel">Kanal</a>
-          <a href="#my-community" data-i18n="nav.community">Jamoa</a>
-          <a href="#vip3" data-i18n="nav.vip3">VIP 3%</a>
-          <a href="#program" data-i18n="nav.program">Dastur</a>
-          <a href="#pricing" data-i18n="nav.pricing">Tariflar</a>
-        </div>
-      </div>
-    </div>
-    <div class="foot-bottom">
-      <span>© <span id="yearNow"></span> Cryptospot 3%. <span data-i18n="footer.rights">Barcha huquqlar himoyalangan.</span></span>
-      <span data-i18n="footer.reminder" style="max-width:480px;text-align:right">Eslatma: faqat SPOT yo'nalishida.</span>
-    </div>
-  </div>
-</footer>
-
-<script src="assets/js/config.js"></script>
-<script src="assets/js/main.js"></script>
-</body>
-</html>
+        <div clas
