@@ -448,6 +448,216 @@
   </div>
 </section>
 
+  <!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<title>CS3% - Candlestick Animation</title>
+<style>
+  /* Demo sahifa uchun fon - haqiqiy saytda buni o'chiring, chunki animatsiya
+     shaffof fonda ishlaydi va sizning sahifangiz foniga o'zi qo'shilib ketadi */
+  body{
+    margin:0;
+    background:#0a0f14;
+    font-family: -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================================================================
+     KO'CHIRIB OLINADIGAN QISM boshlanadi
+     Shu <div class="cs3-chart-wrap">...</div> blokini butunligicha
+     saytingizning "Loyiha haqide" bo'limi ustiga joylashtiring.
+     ================================================================ -->
+<div class="cs3-chart-wrap">
+  <canvas id="cs3Chart"></canvas>
+</div>
+
+<style>
+.cs3-chart-wrap{
+  position:relative;
+  width:100%;
+  height:340px;
+  overflow:hidden;
+  background:transparent; /* saytning o'z foniga qo'shilib ketadi, alohida ramka yo'q */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+}
+#cs3Chart{
+  display:block;
+  width:100%;
+  height:100%;
+}
+@media (max-width: 640px){
+  .cs3-chart-wrap{ height:220px; }
+}
+@media (prefers-reduced-motion: reduce){
+  .cs3-chart-wrap canvas{ animation:none !important; }
+}
+</style>
+
+<script>
+(function(){
+  const canvas = document.getElementById('cs3Chart');
+  const ctx = canvas.getContext('2d');
+  let W, H, DPR;
+
+  function resize(){
+    DPR = window.devicePixelRatio || 1;
+    W = canvas.clientWidth;
+    H = canvas.clientHeight;
+    canvas.width = W * DPR;
+    canvas.height = H * DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener('resize', resize);
+
+  // --- Ranglar (sayt sxemasiga moslash uchun shu yerni o'zgartiring) ---
+  const COLOR_UP     = '#22c55e';   // yashil sham
+  const COLOR_UP_WICK= 'rgba(34,197,94,0.9)';
+  const COLOR_DOWN   = '#ef4444';   // qisqa pastga tortilish uchun qizil (kam-kam)
+  const COLOR_DOWN_WICK = 'rgba(239,68,68,0.9)';
+  const COLOR_MA1    = 'rgba(56,189,248,0.85)';  // ko'k indikator chizig'i
+  const COLOR_MA2    = 'rgba(250,204,21,0.75)';  // sariq indikator chizig'i
+
+  const CANDLE_W = 34;      // sham kengligi
+  const GAP = 18;           // shamlar orasidagi masofa
+  const SPEED = 0.6;        // px/frame - siljish tezligi
+
+  // --- Narx generatori: cheksiz, tasodifiy lekin umumiy trend yuqoriga ---
+  let price = 100;
+  let candles = [];
+  let scrollX = 0;
+
+  function nextCandle(){
+    const open = price;
+    // umumiy trend yuqoriga, vaqti-vaqti bilan kichik pastga tortilish
+    const bias = Math.random() < 0.78 ? 1 : -1;
+    const move = (Math.random() * 3 + 0.5) * bias;
+    let close = open + move;
+    const high = Math.max(open, close) + Math.random() * 1.5;
+    const low  = Math.min(open, close) - Math.random() * 1.2;
+    price = close;
+    // narx juda pasayib ketmasligi uchun asta sozlash
+    if (price < 60) price += 8;
+    if (price > 220) price -= 6;
+    return { open, close, high, low, up: close >= open };
+  }
+
+  function seed(count){
+    for(let i=0;i<count;i++) candles.push(nextCandle());
+  }
+
+  // --- Indikator (harakatlanuvchi o'rtacha) hisoblash ---
+  function movingAverage(arr, period){
+    const res = [];
+    for(let i=0;i<arr.length;i++){
+      const start = Math.max(0, i-period+1);
+      const slice = arr.slice(start, i+1);
+      const avg = slice.reduce((s,c)=>s+c.close,0)/slice.length;
+      res.push(avg);
+    }
+    return res;
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+
+    const totalW = candles.length * (CANDLE_W+GAP);
+    // narxlar diapazonini topib, canvasga moslashtirish
+    const visibleFrom = Math.max(0, Math.floor(scrollX/(CANDLE_W+GAP)) - 1);
+    const visibleTo = Math.min(candles.length, visibleFrom + Math.ceil(W/(CANDLE_W+GAP)) + 3);
+    const visible = candles.slice(visibleFrom, visibleTo);
+
+    let lo = Infinity, hi = -Infinity;
+    visible.forEach(c=>{ lo=Math.min(lo,c.low); hi=Math.max(hi,c.high); });
+    if (!isFinite(lo)) { lo = 0; hi = 1; }
+    const pad = (hi-lo)*0.15 || 1;
+    lo -= pad; hi += pad;
+
+    function yFor(val){
+      return H - ((val-lo)/(hi-lo)) * (H*0.82) - H*0.06;
+    }
+
+    // shamlarni chizish
+    for(let i=visibleFrom;i<visibleTo;i++){
+      const c = candles[i];
+      const x = i*(CANDLE_W+GAP) - scrollX;
+      if (x < -CANDLE_W || x > W+CANDLE_W) continue;
+
+      const yOpen = yFor(c.open);
+      const yClose = yFor(c.close);
+      const yHigh = yFor(c.high);
+      const yLow = yFor(c.low);
+      const bodyTop = Math.min(yOpen,yClose);
+      const bodyH = Math.max(2, Math.abs(yClose-yOpen));
+
+      ctx.strokeStyle = c.up ? COLOR_UP_WICK : COLOR_DOWN_WICK;
+      ctx.lineWidth = 2.6;
+      ctx.beginPath();
+      ctx.moveTo(x+CANDLE_W/2, yHigh);
+      ctx.lineTo(x+CANDLE_W/2, yLow);
+      ctx.stroke();
+
+      ctx.fillStyle = c.up ? COLOR_UP : COLOR_DOWN;
+      ctx.fillRect(x, bodyTop, CANDLE_W, bodyH);
+    }
+
+    // indikator chiziqlarini chizish (2 xil moving average)
+    const ma1 = movingAverage(candles, 5);
+    const ma2 = movingAverage(candles, 12);
+
+    function drawLine(data, color){
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      let started = false;
+      for(let i=visibleFrom;i<visibleTo;i++){
+        const x = i*(CANDLE_W+GAP) - scrollX + CANDLE_W/2;
+        if (x < -20 || x > W+20) continue;
+        const y = yFor(data[i]);
+        if(!started){ ctx.moveTo(x,y); started = true; }
+        else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+    }
+    drawLine(ma1, COLOR_MA1);
+    drawLine(ma2, COLOR_MA2);
+
+    // scroll pozitsiyasini oshirish - cheksiz siljish
+    scrollX += SPEED;
+
+    // scroll juda uzoqqa ketsa, boshini "unutib", massivni siljitib
+    // shu tariqa xotira cheksiz o'smaydi va animatsiya hech qachon
+    // "qaytadan boshlanmaydi" - doim yangi shamlar generatsiya bo'lib boradi
+    const candleStep = CANDLE_W+GAP;
+    if (scrollX > candleStep * 40){
+      const shift = 20;
+      candles.splice(0, shift);
+      scrollX -= shift*candleStep;
+    }
+    // oxiriga yetganda yangi shamlar qo'shib boramiz (cheksiz generatsiya)
+    while (candles.length < Math.ceil(W/(CANDLE_W+GAP)) + 60){
+      candles.push(nextCandle());
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  seed(Math.ceil(window.innerWidth/(CANDLE_W+GAP)) + 80);
+  requestAnimationFrame(draw);
+})();
+</script>
+<!-- ================================================================
+     KO'CHIRIB OLINADIGAN QISM tugaydi
+     ================================================================ -->
+
+</body>
+</html>
+  
+
 <!-- PROBLEM / FEATURES -->
 <section class="section" style="background:var(--bg-alt)">
   <div class="container">
