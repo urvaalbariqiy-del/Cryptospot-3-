@@ -16,6 +16,48 @@
   <meta name="google-site-verification" content="6dXz70I07AuWuCMM8r_XZK_Budmu9JHM1w6QXV11bR0">
 </head>
 <body>
+  <div id="introOverlay" style="position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease;">
+  <video id="introVideo" autoplay muted playsinline style="width:100%;height:100%;object-fit:cover;">
+    <source src="assets/intro-video.mp4" type="video/mp4">
+  </video>
+
+  <button id="introSkip" style="position:absolute;top:24px;right:24px;background:rgba(255,255,255,.12);backdrop-filter:blur(6px);color:#fff;border:1px solid rgba(255,255,255,.35);padding:9px 18px;border-radius:24px;font-size:14px;font-family:Arial,Helvetica,sans-serif;cursor:pointer;">
+    O'tkazib yuborish ✕
+  </button>
+
+  <button id="introUnmute" style="position:absolute;bottom:34px;left:50%;transform:translateX(-50%);background:rgba(212,168,60,.92);color:#0d1526;border:none;padding:11px 22px;border-radius:24px;font-size:14px;font-weight:700;font-family:Arial,Helvetica,sans-serif;cursor:pointer;">
+    🔊 Ovozni yoqish
+  </button>
+</div>
+
+<script>
+(function(){
+  var overlay = document.getElementById('introOverlay');
+  var video   = document.getElementById('introVideo');
+  var skipBtn = document.getElementById('introSkip');
+  var unmuteBtn = document.getElementById('introUnmute');
+
+  if (sessionStorage.getItem('cs3_intro_shown')) {
+    overlay.style.display = 'none';
+  } else {
+    document.body.style.overflow = 'hidden';
+
+    function closeIntro(){
+      overlay.style.opacity = '0';
+      document.body.style.overflow = '';
+      sessionStorage.setItem('cs3_intro_shown', '1');
+      setTimeout(function(){ overlay.style.display = 'none'; }, 600);
+    }
+
+    video.addEventListener('ended', closeIntro);
+    skipBtn.addEventListener('click', closeIntro);
+    unmuteBtn.addEventListener('click', function(){
+      video.muted = false;
+      unmuteBtn.style.display = 'none';
+    });
+  }
+})();
+</script>
 
 <nav class="nav" id="navbar">
   <div class="container nav-inner">
