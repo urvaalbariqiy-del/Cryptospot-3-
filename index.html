@@ -16,26 +16,114 @@
   <meta name="google-site-verification" content="6dXz70I07AuWuCMM8r_XZK_Budmu9JHM1w6QXV11bR0">
 </head>
 <body>
-  <div id="introOverlay" style="position:fixed;inset:0;z-index:99999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease;">
-  <video id="introVideo" autoplay muted playsinline style="width:100%;height:100%;object-fit:cover;">
-    <source src="assets/intro-video.mp4" type="video/mp4">
-  </video>
+  <div id="introOverlay" style="position:fixed;inset:0;z-index:99999;background:radial-gradient(ellipse at 50% 40%,#131f38 0%,#0a1120 65%,#070c17 100%);display:flex;align-items:center;justify-content:center;transition:opacity .7s ease;overflow:hidden;">
 
-  <button id="introSkip" style="position:absolute;top:24px;right:24px;background:rgba(255,255,255,.12);backdrop-filter:blur(6px);color:#fff;border:1px solid rgba(255,255,255,.35);padding:9px 18px;border-radius:24px;font-size:14px;font-family:Arial,Helvetica,sans-serif;cursor:pointer;">
+  <div id="introStars" style="position:absolute;inset:0;"></div>
+
+  <button id="introSkip" style="position:absolute;top:24px;right:24px;background:rgba(255,255,255,.1);backdrop-filter:blur(6px);color:#fff;border:1px solid rgba(255,255,255,.3);padding:9px 18px;border-radius:24px;font-size:14px;font-family:Arial,Helvetica,sans-serif;cursor:pointer;z-index:2;">
     O'tkazib yuborish ✕
   </button>
 
-  <button id="introUnmute" style="position:absolute;bottom:34px;left:50%;transform:translateX(-50%);background:rgba(212,168,60,.92);color:#0d1526;border:none;padding:11px 22px;border-radius:24px;font-size:14px;font-weight:700;font-family:Arial,Helvetica,sans-serif;cursor:pointer;">
-    🔊 Ovozni yoqish
-  </button>
+  <div style="position:relative;text-align:center;z-index:2;">
+    <div id="introChain" style="display:flex;align-items:center;justify-content:center;">
+      <div class="ib-block" style="animation-delay:.0s">
+        <span class="ib-hash">0x4a</span>
+      </div>
+      <div class="ib-line" style="animation-delay:.45s"></div>
+      <div class="ib-block" style="animation-delay:.3s">
+        <span class="ib-hash">0x7f</span>
+      </div>
+      <div class="ib-line" style="animation-delay:.75s"></div>
+      <div class="ib-block" style="animation-delay:.6s">
+        <span class="ib-hash">0x2c</span>
+      </div>
+      <div class="ib-line" style="animation-delay:1.05s"></div>
+      <div class="ib-block" style="animation-delay:.9s">
+        <span class="ib-hash">0x9e</span>
+      </div>
+      <div class="ib-line" style="animation-delay:1.35s"></div>
+      <div class="ib-block ib-block-final" style="animation-delay:1.2s">
+        <span class="ib-hash">3%</span>
+      </div>
+    </div>
+
+    <div id="introTitle" style="margin-top:34px;opacity:0;">
+      <div style="color:#fff;font-family:Arial,Helvetica,sans-serif;font-size:30px;font-weight:800;letter-spacing:.5px;">
+        CRYPTOSPOT <span style="color:#D4A83C;">3%</span>
+      </div>
+      <div style="color:#8a93a8;font-family:Arial,Helvetica,sans-serif;font-size:13.5px;letter-spacing:2px;margin-top:8px;text-transform:uppercase;">
+        Blokcheyn asosidagi ishonchli tahlil
+      </div>
+    </div>
+  </div>
+
+  <style>
+    @keyframes ibPop {
+      0%   { opacity:0; transform:scale(.4) translateY(10px); }
+      60%  { opacity:1; transform:scale(1.12) translateY(0); }
+      100% { opacity:1; transform:scale(1) translateY(0); }
+    }
+    @keyframes ibLine {
+      0%   { width:0; opacity:.3; }
+      100% { width:26px; opacity:1; }
+    }
+    @keyframes ibTitleFade {
+      0%   { opacity:0; transform:translateY(10px); }
+      100% { opacity:1; transform:translateY(0); }
+    }
+    @keyframes ibGlow {
+      0%,100% { box-shadow:0 0 10px rgba(212,168,60,.35), inset 0 0 10px rgba(212,168,60,.15); }
+      50%     { box-shadow:0 0 22px rgba(212,168,60,.65), inset 0 0 14px rgba(212,168,60,.3); }
+    }
+    .ib-block {
+      width:52px;height:52px;border-radius:10px;
+      background:linear-gradient(145deg,#1b2740,#0f1729);
+      border:1.5px solid #D4A83C;
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;
+      animation:ibPop .5s ease-out forwards, ibGlow 1.8s ease-in-out infinite;
+      animation-delay:inherit;
+    }
+    .ib-block-final { border-color:#f2d060; }
+    .ib-hash{ font-family:'Courier New',monospace; font-size:12px; color:#D4A83C; font-weight:700; }
+    .ib-line{
+      width:0; height:2px; margin:0 2px;
+      background:linear-gradient(90deg,#D4A83C,#8a6b1f);
+      opacity:0;
+      animation:ibLine .3s ease-out forwards;
+      animation-delay:inherit;
+    }
+    #introTitle{ animation:ibTitleFade .8s ease-out forwards; animation-delay:1.8s; }
+
+    @media (max-width:480px){
+      .ib-block{ width:40px;height:40px;border-radius:8px; }
+      .ib-hash{ font-size:10px; }
+      .ib-line{ width:0; margin:0 1px; }
+      @keyframes ibLine { 0%{width:0;opacity:.3;} 100%{width:14px;opacity:1;} }
+      #introTitle > div:first-child{ font-size:24px; }
+    }
+  </style>
+
+  <script>
+    (function(){
+      var host = document.getElementById('introStars');
+      for (var i=0;i<50;i++){
+        var s = document.createElement('div');
+        var size = Math.random()*2+1;
+        s.style.cssText = 'position:absolute;width:'+size+'px;height:'+size+'px;border-radius:50%;'+
+          'background:rgba(255,255,255,'+(Math.random()*0.5+0.15)+');'+
+          'top:'+(Math.random()*100)+'%;left:'+(Math.random()*100)+'%;';
+        host.appendChild(s);
+      }
+    })();
+  </script>
+
 </div>
 
 <script>
 (function(){
   var overlay = document.getElementById('introOverlay');
-  var video   = document.getElementById('introVideo');
   var skipBtn = document.getElementById('introSkip');
-  var unmuteBtn = document.getElementById('introUnmute');
 
   if (sessionStorage.getItem('cs3_intro_shown')) {
     overlay.style.display = 'none';
@@ -46,19 +134,15 @@
       overlay.style.opacity = '0';
       document.body.style.overflow = '';
       sessionStorage.setItem('cs3_intro_shown', '1');
-      setTimeout(function(){ overlay.style.display = 'none'; }, 600);
+      setTimeout(function(){ overlay.style.display = 'none'; }, 700);
     }
 
-    video.addEventListener('ended', closeIntro);
     skipBtn.addEventListener('click', closeIntro);
-    unmuteBtn.addEventListener('click', function(){
-      video.muted = false;
-      unmuteBtn.style.display = 'none';
-    });
+    setTimeout(closeIntro, 3400);
   }
 })();
 </script>
-
+  
 <nav class="nav" id="navbar">
   <div class="container nav-inner">
     <a href="#hero" class="nav-logo">
